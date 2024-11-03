@@ -3,7 +3,29 @@
 # 💸💳 Bussiness Cards 💳💸
 
 ¡Hola! 👋
-TODO: Explicación práctica
+Explicación práctica
+
+<p align="left">
+ EXERCICIS ANDROID STUDIO II</br>
+Introducció a la interfície gràfica i interacció amb els seus elements</br>
+ Creador de business cards</br>
+Crea una app que permeti confeccionar business cards (targetes de visita).</br>
+Aquesta app ha de disposar dels següents components dins d’una mateixa activitat:</br>
+• Text (Per mostrar missatges a l’usuari)</br>
+• TextField (Per tal de que l’usuari introdueixi les seves dades)</br>
+• CheckBox (Per sel·leccionar incloure o no alguna informació; per ex. cognoms,
+càrrec, etc.)</br>
+• Switch (Per escollir colors i aspectes gràfics de la targeta)</br>
+• TriState (Per escollir entre tres opcions que decidiu vosaltres)</br>
+• RadioButton (Per escollir aspectes gràfics de la targeta)</br>
+• Icon (Per a què l’usuari pugui afegir icones a la seva targeta: estrelles, casetes, etc.)</br>
+• Image (Per tal de que l’usuari pugui afegir una imatge de fons a la targeta. Podem
+tenir 4 imatges de fons predefinides que no interfereixin amb la lectura del contingut i
+que l’usuari les esculli amb algun dels components anteriors)</br>
+• Card (Per confeccionar la targeta a sota de les opcions anteriors)</br>
+• Progress Indicator (per mostrar l’avenç en la creació de la targeta fins a acabar-la)</br>
+   
+</p>
 
 
 </br>
