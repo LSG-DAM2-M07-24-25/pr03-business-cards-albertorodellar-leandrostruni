@@ -177,6 +177,9 @@ fun BussinesCard(
                     Text(
                         text = "Web"
                     )
+                    Text(
+                        text = "GitHub"
+                    )
 
                 }
 
