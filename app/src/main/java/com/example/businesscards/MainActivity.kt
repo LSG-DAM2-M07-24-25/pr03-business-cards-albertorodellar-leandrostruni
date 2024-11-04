@@ -5,15 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
@@ -24,9 +31,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.businesscards.ui.theme.BusinessCardsTheme
@@ -52,66 +63,159 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var profession by rememberSaveable { mutableStateOf("") }
+    var telephone by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var web by rememberSaveable { mutableStateOf("") }
+    var github by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                text = "Bussiness Cards Creator",
-                modifier = modifier
-            )
-            //BussinesCard
-            BussinesCard(
-                imageLogo = R.drawable.test_image,
-                name = name,
-                surname = surname,
-                profession = profession,
-                modifier = Modifier
-                    .fillMaxSize()
 
-            )
+        //Progress bar implemetar
+
+        //BussinesCard
+        BussinesCard(
+            imageLogo = R.drawable.test_image,
+            name = name,
+            surname = surname,
+            profession = profession,
+            telephone = telephone,
+            email = email,
+            web = web,
+            github = github,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(16.dp)
+        )
+
+
+        LazyColumn(
+            contentPadding = PaddingValues(top = 280.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
 
             //TextFielD Nombre
-            TextField(
-                value = name,
-                onValueChange = { name = it },
-                label = {
-                    Text("Ingrese su Nombre: ")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-
+            item {
+                InputField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = "Ingrese su Nombre: ",
+                )
+            }
             //TextField Apellido
-            TextField(
-                value = surname,
-                onValueChange = { surname = it },
-                label = {
-                    Text("Ingrese su Apellido: ")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+            item {
+                InputField(
+                    value = surname,
+                    onValueChange = { surname = it },
+                    label = "Ingrese su Apellido: "
+                )
+            }
+
 
             //TextField Profesión
-            TextField(
-                value = profession,
-                onValueChange = { profession = it },
-                label = {
-                    Text("Ingrese su Profesión: ")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
+            item {
+                InputField(
+                    value = profession,
+                    onValueChange = { profession = it },
+                    label = "Ingrese su Profesión: "
+                )
+            }
+
+
+            //TextField Teléfono
+            item {
+                InputField(
+                    value = telephone,
+                    onValueChange = { telephone = it },
+                    label = "Ingrese su Teléfono: "
+                )
+            }
+
+
+            //TextField email
+            item {
+                InputField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = "Ingrese su Email: "
+                )
+            }
+
+
+            //TextField web
+            item {
+                InputField(
+                    value = web,
+                    onValueChange = { web = it },
+                    label = "Ingrese su Página Web: "
+                )
+            }
+
+            //TextField github
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
+
+            item {
+                InputField(
+                    value = github,
+                    onValueChange = { github = it },
+                    label = "Ingrese su GitHub: "
+                )
+            }
 
         }
-
     }
 }
+
 
 //Composable de la Bussiness Card
 @Composable
@@ -119,27 +223,35 @@ fun BussinesCard(
     name: String,
     surname: String,
     profession: String,
+    telephone: String,
+    email: String,
+    web: String,
+    github: String,
     imageLogo: Int,
     modifier: Modifier = Modifier
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .height(250.dp)
             .fillMaxWidth()
-            .padding(16.dp)
+            .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
     )
     {
         Box {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight()
 
             ) {
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
                         .weight(1f)
-                        .padding(end = 8.dp)
+                    //.padding(end = 8.dp)
                 ) {
 
                     Image(
@@ -151,34 +263,66 @@ fun BussinesCard(
                             .height(100.dp)
                     )
 
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
                         text = name.ifEmpty { "Nombre" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        textAlign = TextAlign.Center
                     )
                     Text(
-                        text = surname.ifEmpty { "Apellidos" }
+                        text = surname.ifEmpty { "Apellidos" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        textAlign = TextAlign.Center
+
                     )
                     Text(
-                        text = profession.ifEmpty { "Profesión" }
+                        text = profession.ifEmpty { "Profesión" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        textAlign = TextAlign.Center
                     )
                 }
 
                 Column(
                     modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
                         .weight(1f)
-                        .padding(start = 8.dp)
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.Start,
+
+                    //.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = "Telefono"
+                        text =  telephone.ifEmpty { "Telefono" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        textAlign = TextAlign.Start
                     )
                     Text(
-                        text = "Email"
+                        text = email.ifEmpty { "Email" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     )
                     Text(
-                        text = "Web"
+                        text = web.ifEmpty { "Web" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     )
                     Text(
-                        text = "GitHub"
+                        text = github.ifEmpty { "GitHub" },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
                     )
 
                 }
@@ -191,6 +335,22 @@ fun BussinesCard(
     }
 
 
+}
+
+@Composable
+fun InputField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String
+) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            Text(label)
+        },
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
