@@ -1,6 +1,7 @@
 package com.example.businesscards
 
 import android.os.Bundle
+import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,11 +19,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsStartWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -40,7 +43,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
+import java.lang.Error
+import java.util.regex.Pattern
+import javax.xml.validation.Validator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +95,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(16.dp)
+                .zIndex(1f)
         )
 
 
@@ -96,6 +104,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
+                .zIndex(0f)
         ) {
 
             //TextFielD Nombre
@@ -104,6 +113,8 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     value = name,
                     onValueChange = { name = it },
                     label = "Ingrese su Nombre: ",
+                    errorMessage = "El nombre solo debe contener letras.",
+                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
                 )
             }
             //TextField Apellido
@@ -111,7 +122,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = surname,
                     onValueChange = { surname = it },
-                    label = "Ingrese su Apellido: "
+                    label = "Ingrese su Apellido: ",
+                    errorMessage = "El Apellido solo puede contener letras.",
+                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
                 )
             }
 
@@ -121,7 +134,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = profession,
                     onValueChange = { profession = it },
-                    label = "Ingrese su Profesión: "
+                    label = "Ingrese su Profesión: ",
+                    errorMessage = "La profesión solo puede contener letras.",
+                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
                 )
             }
 
@@ -131,7 +146,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = telephone,
                     onValueChange = { telephone = it },
-                    label = "Ingrese su Teléfono: "
+                    label = "Ingrese su Teléfono: ",
+                    errorMessage = "El teléfono/móvil tiene que tener el formato +34 + 9 dígitos.",
+                    validate = {it.matches(Regex("^\\+34\\d{9}\$"))}
                 )
             }
 
@@ -141,7 +158,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = email,
                     onValueChange = { email = it },
-                    label = "Ingrese su Email: "
+                    label = "Ingrese su Email: ",
+                    errorMessage = "El Email no tiene el fórmato válido.",
+                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches()}
                 )
             }
 
@@ -151,7 +170,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = web,
                     onValueChange = { web = it },
-                    label = "Ingrese su Página Web: "
+                    label = "Ingrese su Página Web: ",
+                    errorMessage = "La dirección Web no tiene el formato válido",
+                    validate = {it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n"))}
                 )
             }
 
@@ -160,58 +181,11 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = github,
                     onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
+                    label = "Ingrese su GitHub: ",
+                    errorMessage = "Ingrese un perfil de usuairo de GitHub válido.",
+                    validate = {it.matches(Regex("^github\\.com/[a-zA-Z0-9_-]{1,39}$"))}
                 )
             }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su GitHub: "
-                )
-            }
-
         }
     }
 }
@@ -300,7 +274,7 @@ fun BussinesCard(
                     //.padding(start = 8.dp)
                 ) {
                     Text(
-                        text =  telephone.ifEmpty { "Telefono" },
+                        text = telephone.ifEmpty { "Telefono" },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
@@ -341,16 +315,38 @@ fun BussinesCard(
 fun InputField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String
+    label: String,
+    errorMessage: String? = null,
+    validate: (String) -> Boolean
 ) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = {
-            Text(label)
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
+    var isError by rememberSaveable { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        TextField(
+            value = value,
+            onValueChange = { input ->
+                if (validate(input)) {
+                    onValueChange(input)
+                    isError = false
+                } else {
+                    isError = true
+                }
+
+            },
+            label = { Text(label) },
+            modifier = Modifier.fillMaxWidth(),
+            isError = isError
+        )
+        if (isError && errorMessage != null) {
+            Text(
+                text = errorMessage,
+                color = Color.Red,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                )
+        }
+
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
