@@ -274,7 +274,7 @@ fun BussinesCard(
                     //.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = telephone.ifEmpty { "Telefono" },
+                        text = telephone.ifEmpty { "Teléfono" },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
