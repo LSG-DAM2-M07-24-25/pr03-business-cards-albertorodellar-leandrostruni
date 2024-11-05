@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,7 +115,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { name = it },
                     label = "Ingrese su Nombre: ",
                     errorMessage = "El nombre solo debe contener letras.",
-                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
                 )
             }
             //TextField Apellido
@@ -124,7 +125,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { surname = it },
                     label = "Ingrese su Apellido: ",
                     errorMessage = "El Apellido solo puede contener letras.",
-                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
                 )
             }
 
@@ -136,7 +137,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { profession = it },
                     label = "Ingrese su Profesión: ",
                     errorMessage = "La profesión solo puede contener letras.",
-                    validate = {it.matches(Regex("^[a-zA-Z\\s]+$"))}
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
                 )
             }
 
@@ -147,8 +148,8 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     value = telephone,
                     onValueChange = { telephone = it },
                     label = "Ingrese su Teléfono: ",
-                    errorMessage = "El teléfono/móvil tiene que tener el formato +34 + 9 dígitos.",
-                    validate = {it.matches(Regex("^\\+34\\d{9}\$"))}
+                    errorMessage = "El teléfono/móvil tiene que tener el formato +34 seguido de 9 dígitos.",
+                    validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) }
                 )
             }
 
@@ -160,7 +161,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { email = it },
                     label = "Ingrese su Email: ",
                     errorMessage = "El Email no tiene el fórmato válido.",
-                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches()}
+                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() }
                 )
             }
 
@@ -172,7 +173,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { web = it },
                     label = "Ingrese su Página Web: ",
                     errorMessage = "La dirección Web no tiene el formato válido",
-                    validate = {it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n"))}
+                    validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) }
                 )
             }
 
@@ -181,9 +182,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 InputField(
                     value = github,
                     onValueChange = { github = it },
-                    label = "Ingrese su GitHub: ",
-                    errorMessage = "Ingrese un perfil de usuairo de GitHub válido.",
-                    validate = {it.matches(Regex("^github\\.com/[a-zA-Z0-9_-]{1,39}$"))}
+                    label = "Ingrese su perfil de GitHub: ",
+                    errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
+                    validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) }
                 )
             }
         }
@@ -293,22 +294,15 @@ fun BussinesCard(
                             .weight(1f)
                     )
                     Text(
-                        text = github.ifEmpty { "GitHub" },
+                        text = if(github.isNotEmpty()) "github.com/$github" else "GitHub",
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     )
-
                 }
-
             }
-
-
         }
-
     }
-
-
 }
 
 @Composable
@@ -319,19 +313,21 @@ fun InputField(
     errorMessage: String? = null,
     validate: (String) -> Boolean
 ) {
+    var tempValue by rememberSaveable { mutableStateOf(value) }
     var isError by rememberSaveable { mutableStateOf(false) }
+
 
     Column(modifier = Modifier.fillMaxWidth()) {
         TextField(
-            value = value,
+            value = tempValue,
             onValueChange = { input ->
-                if (validate(input)) {
+                tempValue = input
+                if (validate(input) || input.isEmpty()) {
                     onValueChange(input)
                     isError = false
                 } else {
                     isError = true
                 }
-
             },
             label = { Text(label) },
             modifier = Modifier.fillMaxWidth(),
@@ -343,7 +339,7 @@ fun InputField(
                 color = Color.Red,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp)
-                )
+            )
         }
 
     }
