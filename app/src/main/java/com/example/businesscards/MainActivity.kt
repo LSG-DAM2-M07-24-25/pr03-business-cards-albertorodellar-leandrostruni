@@ -73,12 +73,18 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var web by rememberSaveable { mutableStateOf("") }
     var github by rememberSaveable { mutableStateOf("") }
+
     //Variable para ocultar el teclado cuando se hace click en el LazyColumn (fuera del teclado)
     val keyboardController = LocalSoftwareKeyboardController.current
-    val keyboardActions = LocalSoftwareKeyboardController.current
+
 
     //Variables para checkBox
     var showSurname by rememberSaveable { mutableStateOf(true) }
+    var showProfession by rememberSaveable { mutableStateOf(true) }
+    var showPhone by rememberSaveable { mutableStateOf(true) }
+    var showWeb by rememberSaveable { mutableStateOf(true) }
+    var showGitHub by rememberSaveable { mutableStateOf(true) }
+
 
     Box(
         modifier = modifier
@@ -95,10 +101,14 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             surname = surname,
             showSurname = showSurname,
             profession = profession,
+            showProfession = showProfession,
             phone = phone,
+            showPhone = showPhone,
             email = email,
             web = web,
+            showWeb = showWeb,
             github = github,
+            showGitHub = showGitHub,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(16.dp)
@@ -111,8 +121,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
-                .zIndex(0f)
-
+                .zIndex(0f),
         ) {
 
             //TextFielD Nombre
@@ -124,6 +133,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     errorMessage = "El nombre solo debe contener letras.",
                     validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                     keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
             //TextField Apellido
@@ -133,7 +145,11 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { surname = it },
                     label = "Ingrese su Apellido: ",
                     errorMessage = "El Apellido solo puede contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
 
@@ -145,7 +161,11 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { profession = it },
                     label = "Ingrese su Profesión: ",
                     errorMessage = "La profesión solo puede contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
 
@@ -158,7 +178,13 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     label = "Ingrese su Teléfono: ",
                     errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
                     validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
 
@@ -170,7 +196,11 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { email = it },
                     label = "Ingrese su Email: ",
                     errorMessage = "El Email no tiene el fórmato válido.",
-                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() }
+                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
 
@@ -182,7 +212,11 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { web = it },
                     label = "Ingrese su Página Web: ",
                     errorMessage = "La dirección Web no tiene el formato válido",
-                    validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) }
+                    validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
 
@@ -193,9 +227,14 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { github = it },
                     label = "Ingrese su perfil de GitHub: ",
                     errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
-                    validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) }
+                    validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = { keyboardController?.hide() }
+                    )
                 )
             }
+
             item {
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -204,12 +243,17 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             item {
                 CheckBoxOption(
                     showSurname = showSurname,
-                    onShowSurnameChange = { showSurname = it }
+                    onShowSurnameChange = { showSurname = it },
+                    showProfession = showProfession,
+                    onShowProfessionChange = { showProfession = it },
+                    showPhone = showPhone,
+                    onShowPhoneChange = { showPhone = it },
+                    showWeb = showWeb,
+                    onShowWebChange = { showWeb = it },
+                    showGitHub = showGitHub,
+                    onShowGitHub = { showGitHub = it }
                 )
-
             }
-
-
         }
     }
 }
@@ -222,10 +266,14 @@ fun BussinesCard(
     surname: String,
     showSurname: Boolean,
     profession: String,
+    showProfession: Boolean,
     phone: String,
+    showPhone: Boolean,
     email: String,
     web: String,
+    showWeb: Boolean,
     github: String,
+    showGitHub: Boolean,
     imageLogo: Int,
     modifier: Modifier = Modifier
 ) {
@@ -280,14 +328,15 @@ fun BussinesCard(
                             textAlign = TextAlign.Center
                         )
                     }
-
-                    Text(
-                        text = profession.ifEmpty { "Profesión" },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        textAlign = TextAlign.Center
-                    )
+                    if (showProfession) {
+                        Text(
+                            text = profession.ifEmpty { "Profesión" },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
 
                 Column(
@@ -300,13 +349,16 @@ fun BussinesCard(
 
                     //.padding(start = 8.dp)
                 ) {
-                    Text(
-                        text = phone.ifEmpty { "Teléfono" },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(top = 20.dp)
-                    )
+                    if (showPhone) {
+                        Text(
+                            text = phone.ifEmpty { "Teléfono" },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(top = 20.dp)
+                        )
+                    }
+
                     Text(
                         text = email.ifEmpty { "Email" },
                         modifier = Modifier
@@ -314,20 +366,27 @@ fun BussinesCard(
                             .weight(1f)
                             .padding(top = 20.dp)
                     )
-                    Text(
-                        text = web.ifEmpty { "Web" },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(top = 20.dp)
-                    )
-                    Text(
-                        text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .padding(top = 20.dp)
-                    )
+
+                    if (showWeb) {
+                        Text(
+                            text = web.ifEmpty { "Web" },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(top = 20.dp)
+                        )
+                    }
+
+                    if (showGitHub) {
+                        Text(
+                            text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .padding(top = 20.dp)
+                        )
+                    }
+
                 }
             }
         }
@@ -383,8 +442,16 @@ fun InputField(
 fun CheckBoxOption(
     showSurname: Boolean,
     onShowSurnameChange: (Boolean) -> Unit,
+    showProfession: Boolean,
+    onShowProfessionChange: (Boolean) -> Unit,
+    showPhone: Boolean,
+    onShowPhoneChange: (Boolean) -> Unit,
+    showWeb: Boolean,
+    onShowWebChange: (Boolean) -> Unit,
+    showGitHub: Boolean,
+    onShowGitHub: (Boolean) -> Unit
 
-    ) {
+) {
     Column {
         Text("Mostrar Datos")
 
@@ -394,6 +461,36 @@ fun CheckBoxOption(
                 onCheckedChange = onShowSurnameChange
             )
             Text(text = "Mostrar Apellidos")
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showProfession,
+                onCheckedChange = onShowProfessionChange
+            )
+            Text(text = "Mostrar Profesión")
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showPhone,
+                onCheckedChange = onShowPhoneChange
+            )
+            Text(text = "Mostrar Teléfono")
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showWeb,
+                onCheckedChange = onShowWebChange
+            )
+            Text(text = "Mostrar Web")
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showGitHub,
+                onCheckedChange = onShowGitHub
+            )
+            Text(text = "Mostrar GitHub")
         }
     }
 }
