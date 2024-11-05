@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,13 +18,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsStartWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,16 +38,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
-import java.lang.Error
-import java.util.regex.Pattern
-import javax.xml.validation.Validator
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,25 +69,33 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var profession by rememberSaveable { mutableStateOf("") }
-    var telephone by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
     var web by rememberSaveable { mutableStateOf("") }
     var github by rememberSaveable { mutableStateOf("") }
+    //Variable para ocultar el teclado cuando se hace click en el LazyColumn (fuera del teclado)
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val keyboardActions = LocalSoftwareKeyboardController.current
+
+    //Variables para checkBox
+    var showSurname by rememberSaveable { mutableStateOf(true) }
 
     Box(
         modifier = modifier
             .fillMaxSize()
+            .clickable { keyboardController?.hide() }
     ) {
 
         //Progress bar implemetar
 
-        //BussinesCard
+        //BussinesCard que se actualiza en tiempo real
         BussinesCard(
             imageLogo = R.drawable.test_image,
             name = name,
             surname = surname,
+            showSurname = showSurname,
             profession = profession,
-            telephone = telephone,
+            phone = phone,
             email = email,
             web = web,
             github = github,
@@ -106,6 +112,7 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .zIndex(0f)
+
         ) {
 
             //TextFielD Nombre
@@ -115,7 +122,8 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onValueChange = { name = it },
                     label = "Ingrese su Nombre: ",
                     errorMessage = "El nombre solo debe contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) }
+                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                 )
             }
             //TextField Apellido
@@ -145,11 +153,12 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
             //TextField Teléfono
             item {
                 InputField(
-                    value = telephone,
-                    onValueChange = { telephone = it },
+                    value = phone,
+                    onValueChange = { phone = it },
                     label = "Ingrese su Teléfono: ",
-                    errorMessage = "El teléfono/móvil tiene que tener el formato +34 seguido de 9 dígitos.",
-                    validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) }
+                    errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
+                    validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
                 )
             }
 
@@ -187,6 +196,20 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) }
                 )
             }
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            //Seccion checkbox
+            item {
+                CheckBoxOption(
+                    showSurname = showSurname,
+                    onShowSurnameChange = { showSurname = it }
+                )
+
+            }
+
+
         }
     }
 }
@@ -197,8 +220,9 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
 fun BussinesCard(
     name: String,
     surname: String,
+    showSurname: Boolean,
     profession: String,
-    telephone: String,
+    phone: String,
     email: String,
     web: String,
     github: String,
@@ -247,14 +271,16 @@ fun BussinesCard(
                             .weight(1f),
                         textAlign = TextAlign.Center
                     )
-                    Text(
-                        text = surname.ifEmpty { "Apellidos" },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                        textAlign = TextAlign.Center
+                    if (showSurname) {
+                        Text(
+                            text = surname.ifEmpty { "Apellidos" },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
-                    )
                     Text(
                         text = profession.ifEmpty { "Profesión" },
                         modifier = Modifier
@@ -275,29 +301,32 @@ fun BussinesCard(
                     //.padding(start = 8.dp)
                 ) {
                     Text(
-                        text = telephone.ifEmpty { "Telefono" },
+                        text = phone.ifEmpty { "Teléfono" },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(1f),
-                        textAlign = TextAlign.Start
+                            .weight(1f)
+                            .padding(top = 20.dp)
                     )
                     Text(
                         text = email.ifEmpty { "Email" },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
+                            .padding(top = 20.dp)
                     )
                     Text(
                         text = web.ifEmpty { "Web" },
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
+                            .padding(top = 20.dp)
                     )
                     Text(
-                        text = if(github.isNotEmpty()) "github.com/$github" else "GitHub",
+                        text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
+                            .padding(top = 20.dp)
                     )
                 }
             }
@@ -311,7 +340,9 @@ fun InputField(
     onValueChange: (String) -> Unit,
     label: String,
     errorMessage: String? = null,
-    validate: (String) -> Boolean
+    validate: (String) -> Boolean,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     var tempValue by rememberSaveable { mutableStateOf(value) }
     var isError by rememberSaveable { mutableStateOf(false) }
@@ -331,7 +362,10 @@ fun InputField(
             },
             label = { Text(label) },
             modifier = Modifier.fillMaxWidth(),
-            isError = isError
+            isError = isError,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
+
         )
         if (isError && errorMessage != null) {
             Text(
@@ -342,6 +376,25 @@ fun InputField(
             )
         }
 
+    }
+}
+
+@Composable
+fun CheckBoxOption(
+    showSurname: Boolean,
+    onShowSurnameChange: (Boolean) -> Unit,
+
+    ) {
+    Column {
+        Text("Mostrar Datos")
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Checkbox(
+                checked = showSurname,
+                onCheckedChange = onShowSurnameChange
+            )
+            Text(text = "Mostrar Apellidos")
+        }
     }
 }
 
@@ -357,6 +410,7 @@ fun BusinessCardsCreatorPreview() {
 
 //TODO
 /*
+Cambiar web por Linkedin
 Creador de business cards
 Crea una app que permeti confeccionar business cards (targetes de visita).
 Aquesta app ha de disposar dels següents components dins d’una mateixa activitat:
