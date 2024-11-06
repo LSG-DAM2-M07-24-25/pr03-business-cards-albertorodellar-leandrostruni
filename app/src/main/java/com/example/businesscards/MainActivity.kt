@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -53,9 +56,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            BusinessCardsTheme {
+            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
+            BusinessCardsTheme(darkTheme = isDarkTheme) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     BusinessCardsCreator(
+                        isDarkTheme = isDarkTheme,
+                        useDarkTheme = { isDarkTheme = it },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -65,7 +71,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BusinessCardsCreator(modifier: Modifier = Modifier) {
+fun BusinessCardsCreator(
+    modifier: Modifier = Modifier,
+    isDarkTheme: Boolean,
+    useDarkTheme: (Boolean) -> Unit
+) {
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var profession by rememberSaveable { mutableStateOf("") }
@@ -252,6 +262,21 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
                     onShowWebChange = { showWeb = it },
                     showGitHub = showGitHub,
                     onShowGitHub = { showGitHub = it }
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            //Sección Switch
+            item {
+                Text(
+                    text = "Cambiar entre Modo Claro o Modo Oscuro"
+                )
+                SwitchTheme(
+                    isDarkTheme = isDarkTheme,
+                    useDarkTheme = useDarkTheme
                 )
             }
         }
@@ -495,13 +520,39 @@ fun CheckBoxOption(
     }
 }
 
+//Switch para cambiar entre tema claro y oscuro
+@Composable
+fun SwitchTheme(
+    isDarkTheme: Boolean,
+    useDarkTheme: (Boolean) -> Unit
+) {
+
+    BusinessCardsTheme(
+        darkTheme = isDarkTheme,
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = if (isDarkTheme) "Tema Oscuro" else "Tema Claro")
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = { useDarkTheme(it) }
+            )
+        }
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun BusinessCardsCreatorPreview() {
-    BusinessCardsTheme {
-        BusinessCardsCreator()
+    BusinessCardsTheme(darkTheme = false) {
+        BusinessCardsCreator(
+            isDarkTheme = false,
+            useDarkTheme = {}
+        )
     }
-
 }
 
 
