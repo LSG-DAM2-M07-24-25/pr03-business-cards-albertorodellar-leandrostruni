@@ -5,9 +5,12 @@ import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,11 +26,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxColors
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,10 +45,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -51,11 +62,14 @@ import com.example.businesscards.ui.theme.BusinessCardsTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
-            BusinessCardsTheme {
+            var isDarkTheme by rememberSaveable { mutableStateOf(false) }
+            BusinessCardsTheme(darkTheme = isDarkTheme) {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     BusinessCardsCreator(
+                        isDarkTheme = isDarkTheme,
+                        useDarkTheme = { isDarkTheme = it },
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -64,8 +78,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+//Composable de la Activity Principal
 @Composable
-fun BusinessCardsCreator(modifier: Modifier = Modifier) {
+fun BusinessCardsCreator(
+    modifier: Modifier = Modifier,
+    isDarkTheme: Boolean,
+    useDarkTheme: (Boolean) -> Unit
+) {
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var profession by rememberSaveable { mutableStateOf("") }
@@ -77,14 +96,15 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
     //Variable para ocultar el teclado cuando se hace click en el LazyColumn (fuera del teclado)
     val keyboardController = LocalSoftwareKeyboardController.current
 
-
-    //Variables para checkBox
+    //Estados para checkBox
     var showSurname by rememberSaveable { mutableStateOf(true) }
     var showProfession by rememberSaveable { mutableStateOf(true) }
     var showPhone by rememberSaveable { mutableStateOf(true) }
     var showWeb by rememberSaveable { mutableStateOf(true) }
     var showGitHub by rememberSaveable { mutableStateOf(true) }
 
+    //Estado para el borde de la tarjeta
+    var borderStroke by rememberSaveable { mutableStateOf<BorderStroke?>(null) }
 
     Box(
         modifier = modifier
@@ -93,166 +113,200 @@ fun BusinessCardsCreator(modifier: Modifier = Modifier) {
     ) {
 
         //Progress bar implemetar
-
-        //BussinesCard que se actualiza en tiempo real
-        BussinesCard(
-            imageLogo = R.drawable.test_image,
-            name = name,
-            surname = surname,
-            showSurname = showSurname,
-            profession = profession,
-            showProfession = showProfession,
-            phone = phone,
-            showPhone = showPhone,
-            email = email,
-            web = web,
-            showWeb = showWeb,
-            github = github,
-            showGitHub = showGitHub,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(16.dp)
-                .zIndex(1f)
-        )
-
-
-        LazyColumn(
-            contentPadding = PaddingValues(top = 280.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .zIndex(0f),
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
+            //BussinesCard que se actualiza en tiempo real
+            BussinesCard(
+                imageLogo = R.drawable.test_image,
+                name = name,
+                surname = surname,
+                showSurname = showSurname,
+                profession = profession,
+                showProfession = showProfession,
+                phone = phone,
+                showPhone = showPhone,
+                email = email,
+                web = web,
+                showWeb = showWeb,
+                github = github,
+                showGitHub = showGitHub,
+                borderStroke = borderStroke ?: BorderStroke(0.dp, Color.Transparent),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .zIndex(1f)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
 
-            //TextFielD Nombre
-            item {
-                InputField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = "Ingrese su Nombre: ",
-                    errorMessage = "El nombre solo debe contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+            LazyColumn(
+                contentPadding = PaddingValues(top = 24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .zIndex(0f),
+            ) {
+
+                //TextFielD Nombre
+                item {
+                    InputField(
+                        value = name,
+                        onValueChange = { name = it },
+                        label = "Ingrese su Nombre: ",
+                        errorMessage = "El nombre solo debe contener letras.",
+                        validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
-            //TextField Apellido
-            item {
-                InputField(
-                    value = surname,
-                    onValueChange = { surname = it },
-                    label = "Ingrese su Apellido: ",
-                    errorMessage = "El Apellido solo puede contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                }
+
+                //TextField Apellido
+                item {
+                    InputField(
+                        value = surname,
+                        onValueChange = { surname = it },
+                        label = "Ingrese su Apellido: ",
+                        errorMessage = "El Apellido solo puede contener letras.",
+                        validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
 
-            //TextField Profesión
-            item {
-                InputField(
-                    value = profession,
-                    onValueChange = { profession = it },
-                    label = "Ingrese su Profesión: ",
-                    errorMessage = "La profesión solo puede contener letras.",
-                    validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                //TextField Profesión
+                item {
+                    InputField(
+                        value = profession,
+                        onValueChange = { profession = it },
+                        label = "Ingrese su Profesión: ",
+                        errorMessage = "La profesión solo puede contener letras.",
+                        validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
 
-            //TextField Teléfono
-            item {
-                InputField(
-                    value = phone,
-                    onValueChange = { phone = it },
-                    label = "Ingrese su Teléfono: ",
-                    errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
-                    validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                //TextField Teléfono
+                item {
+                    InputField(
+                        value = phone,
+                        onValueChange = { phone = it },
+                        label = "Ingrese su Teléfono: ",
+                        errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
+                        validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
 
-            //TextField email
-            item {
-                InputField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = "Ingrese su Email: ",
-                    errorMessage = "El Email no tiene el fórmato válido.",
-                    validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                //TextField email
+                item {
+                    InputField(
+                        value = email,
+                        onValueChange = { email = it },
+                        label = "Ingrese su Email: ",
+                        errorMessage = "El Email no tiene el fórmato válido.",
+                        validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
 
-            //TextField web
-            item {
-                InputField(
-                    value = web,
-                    onValueChange = { web = it },
-                    label = "Ingrese su Página Web: ",
-                    errorMessage = "La dirección Web no tiene el formato válido",
-                    validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                //TextField web
+                item {
+                    InputField(
+                        value = web,
+                        onValueChange = { web = it },
+                        label = "Ingrese su Página Web: ",
+                        errorMessage = "La dirección Web no tiene el formato válido",
+                        validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
-            //TextField github
-            item {
-                InputField(
-                    value = github,
-                    onValueChange = { github = it },
-                    label = "Ingrese su perfil de GitHub: ",
-                    errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
-                    validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
-                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(
-                        onDone = { keyboardController?.hide() }
+                //TextField github
+                item {
+                    InputField(
+                        value = github,
+                        onValueChange = { github = it },
+                        label = "Ingrese su perfil de GitHub: ",
+                        errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
+                        validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
+                        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = { keyboardController?.hide() }
+                        )
                     )
-                )
-            }
+                }
 
-            item {
-                Spacer(modifier = Modifier.height(16.dp))
-            }
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
 
-            //Seccion checkbox
-            item {
-                CheckBoxOption(
-                    showSurname = showSurname,
-                    onShowSurnameChange = { showSurname = it },
-                    showProfession = showProfession,
-                    onShowProfessionChange = { showProfession = it },
-                    showPhone = showPhone,
-                    onShowPhoneChange = { showPhone = it },
-                    showWeb = showWeb,
-                    onShowWebChange = { showWeb = it },
-                    showGitHub = showGitHub,
-                    onShowGitHub = { showGitHub = it }
-                )
+                //Seccion checkbox
+                item {
+                    CheckBoxOption(
+                        showSurname = showSurname,
+                        onShowSurnameChange = { showSurname = it },
+                        showProfession = showProfession,
+                        onShowProfessionChange = { showProfession = it },
+                        showPhone = showPhone,
+                        onShowPhoneChange = { showPhone = it },
+                        showWeb = showWeb,
+                        onShowWebChange = { showWeb = it },
+                        showGitHub = showGitHub,
+                        onShowGitHub = { showGitHub = it }
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                //Sección Switch
+                item {
+                    Text(
+                        text = "Cambiar entre Modo Claro o Modo Oscuro"
+                    )
+                    SwitchTheme(
+                        isDarkTheme = isDarkTheme,
+                        useDarkTheme = useDarkTheme
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                //Sección del Tristate
+                item {
+                    Text(
+                        text = "Cambiar el borde de la tarjeta"
+                    )
+                    TriStateBorder(onBorderChange = { newBorder ->
+                        borderStroke = newBorder
+                    }
+                    )
+                }
             }
         }
     }
@@ -275,6 +329,7 @@ fun BussinesCard(
     github: String,
     showGitHub: Boolean,
     imageLogo: Int,
+    borderStroke: BorderStroke,
     modifier: Modifier = Modifier
 ) {
 
@@ -282,8 +337,9 @@ fun BussinesCard(
         modifier = modifier
             .height(250.dp)
             .fillMaxWidth()
-            .shadow(4.dp, shape = RoundedCornerShape(8.dp))
-            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+            .background(Color.Gray, shape = RoundedCornerShape(16.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
+        border = borderStroke
     )
     {
         Box {
@@ -386,13 +442,13 @@ fun BussinesCard(
                                 .padding(top = 20.dp)
                         )
                     }
-
                 }
             }
         }
     }
 }
 
+//Composable de lo campos input
 @Composable
 fun InputField(
     value: String,
@@ -438,6 +494,7 @@ fun InputField(
     }
 }
 
+//Composable del CheckBoxOption
 @Composable
 fun CheckBoxOption(
     showSurname: Boolean,
@@ -495,13 +552,68 @@ fun CheckBoxOption(
     }
 }
 
+//Switch para cambiar entre tema claro y oscuro
+@Composable
+fun SwitchTheme(
+    isDarkTheme: Boolean,
+    useDarkTheme: (Boolean) -> Unit
+) {
+
+    BusinessCardsTheme(
+        darkTheme = isDarkTheme,
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(text = if (isDarkTheme) "Tema Oscuro" else "Tema Claro")
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = { useDarkTheme(it) }
+            )
+        }
+    }
+}
+
+//Componente triStateCheckbox para cambiar el borde de la tarjeta
+@Composable
+fun TriStateBorder(
+    onBorderChange: (BorderStroke?) -> Unit
+) {
+    var checkboxState by rememberSaveable { mutableStateOf(ToggleableState.Off) }
+
+    var borderStroke = when (checkboxState) {
+        ToggleableState.Off -> null
+        ToggleableState.On -> BorderStroke(2.dp, Color.Black)
+        ToggleableState.Indeterminate -> BorderStroke(4.dp, Color.Black)
+    }
+
+    onBorderChange(borderStroke)
+
+    TriStateCheckbox(
+        state = checkboxState,
+        onClick = {
+            checkboxState = when (checkboxState) {
+                ToggleableState.Off -> ToggleableState.On
+                ToggleableState.On -> ToggleableState.Indeterminate
+                ToggleableState.Indeterminate -> ToggleableState.Off
+            }
+        },
+        colors = CheckboxDefaults.colors()
+    )
+}
+
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun BusinessCardsCreatorPreview() {
-    BusinessCardsTheme {
-        BusinessCardsCreator()
+    BusinessCardsTheme(darkTheme = false) {
+        BusinessCardsCreator(
+            isDarkTheme = false,
+            useDarkTheme = {}
+        )
     }
-
 }
 
 
