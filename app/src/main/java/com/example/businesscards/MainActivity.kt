@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,7 +22,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -40,7 +37,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,9 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -65,29 +59,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
-import com.example.businesscards.ui.theme.LightBackgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlin.math.max
@@ -96,6 +78,16 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 
 
+
+/**
+ * Método de entrada que se ejecuta cuando se crea la actividad.
+ *
+ * Configura el contenido de la actividad usando `Compose`. Establece una variable de estado para
+ * el tema oscuro (`isDarkTheme`) y define `BusinessCardsTheme` como el tema principal de la aplicación.
+ * Permite alternar entre el tema claro y oscuro.
+ *
+ * @param savedInstanceState Estado previamente guardado, si existe, para restaurar la actividad.
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,13 +107,30 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-//Composable de la Activity Principal
+
+/**
+ * Composable principal de la actividad que muestra el BusinessCardsCreator.
+ *
+ * Este componente permite al usuario personalizar una tarjeta de presentación con diferentes opciones,
+ * incluyendo el icono de perfil, nombre, apellidos, profesión, teléfono, email, usuario de LinkedIn y GitHub,
+ * borde de la tarjeta y fondo de la tarjeta. También proporciona opciones para alternar entre el modo claro y oscuro,
+ * y para mostrar u ocultar ciertos elementos de la tarjeta mediante casillas de verificación.
+ *
+ * @param modifier Modificador opcional para personalizar el diseño.
+ * @param isDarkTheme Indica si el tema oscuro está activado.
+ * @param useDarkTheme Callback que se invoca para cambiar entre el modo claro y oscuro.
+ *
+ * @author Alberto Rodellar
+ * @author Leandro Struni
+ * @since 7/11/2024
+ */
 @Composable
 fun BusinessCardsCreator(
     modifier: Modifier = Modifier,
     isDarkTheme: Boolean,
     useDarkTheme: (Boolean) -> Unit
 ) {
+
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var profession by rememberSaveable { mutableStateOf("") }
@@ -168,10 +177,10 @@ fun BusinessCardsCreator(
             .fillMaxSize()
             .clickable { keyboardController?.hide() }
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
 
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
             Text(
                 text = "Bussines Card Creator",
@@ -221,6 +230,7 @@ fun BusinessCardsCreator(
 
             Spacer(modifier = Modifier.height(6.dp))
 
+            //Lazy Column para mostrar las opciones de personalización
             LazyColumn(
                 contentPadding = PaddingValues(top = 24.dp),
                 modifier = Modifier
@@ -229,7 +239,8 @@ fun BusinessCardsCreator(
                     .zIndex(0f),
             ) {
 
-                item{
+                //Icono de la tarjeta
+                item {
                     Text(
                         text = "Cambiar Icono de la tarjeta",
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -317,7 +328,7 @@ fun BusinessCardsCreator(
                 }
 
 
-                //TextField email
+                //TextField Email
                 item {
                     InputField(
                         value = email,
@@ -426,6 +437,7 @@ fun BusinessCardsCreator(
                     )
                 }
 
+                //Sección fondo de la tarjeta
                 item {
                     Text(
                         text = "Seleccionar el fondo de la tarjeta",
@@ -450,7 +462,29 @@ fun BusinessCardsCreator(
 }
 
 
-//Composable de la Bussiness Card
+/**
+ * Composable que representa una tarjeta de presentación con información personal y un icono de perfil.
+ *
+ * Permite personalizar diferentes campos, mostrar u ocultar secciones de información, establecer un borde y
+ * un fondo personalizado, y agregar un icono de perfil.
+ *
+ * @param name Nombre del usuario que se mostrará en la tarjeta.
+ * @param surname Apellido del usuario, que se muestra si showSurname es verdadero.
+ * @param showSurname Indica si el apellido debe mostrarse en la tarjeta.
+ * @param profession Profesión del usuario, que se muestra si showProfession es verdadero.
+ * @param showProfession Indica si la profesión debe mostrarse en la tarjeta.
+ * @param phone Teléfono del usuario, que se muestra si showPhone es verdadero.
+ * @param showPhone Indica si el teléfono debe mostrarse en la tarjeta.
+ * @param email Correo electrónico del usuario.
+ * @param web Perfil de LinkedIn del usuario, que se muestra si showWeb es verdadero.
+ * @param showWeb Indica si el perfil de LinkedIn debe mostrarse en la tarjeta.
+ * @param github Perfil de GitHub del usuario, que se muestra si showGitHub es verdadero.
+ * @param showGitHub Indica si el perfil de GitHub debe mostrarse en la tarjeta.
+ * @param icon Icono de perfil que se muestra en la tarjeta.
+ * @param borderStroke Estilo del borde para la tarjeta.
+ * @param backgroundImage Imagen de fondo de la tarjeta; si es null, se usará un fondo predeterminado.
+ * @param modifier Modificador opcional para personalizar el diseño de la tarjeta.
+ */
 @Composable
 fun BussinesCard(
     name: String,
@@ -471,6 +505,7 @@ fun BussinesCard(
     modifier: Modifier = Modifier
 ) {
 
+    //Componente Card
     Card(
         modifier = modifier
             .height(250.dp)
@@ -512,8 +547,8 @@ fun BussinesCard(
                         .fillMaxWidth()
                         .padding(16.dp)
                         .weight(1f)
-                    //.padding(end = 8.dp)
-                    , horizontalAlignment = Alignment.CenterHorizontally
+                        .padding(start = 10.dp, top = 16.dp, end = 16.dp, bottom = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
                     Icon(
@@ -563,10 +598,8 @@ fun BussinesCard(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .weight(1f)
-                        .padding(start = 5.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
+                        .padding(start = 5.dp, top = 16.dp, end = 10.dp, bottom = 16.dp),
                     horizontalAlignment = Alignment.Start,
-
-                    //.padding(start = 8.dp)
                 ) {
                     if (showPhone) {
                         Row(
@@ -655,7 +688,23 @@ fun BussinesCard(
     }
 }
 
-//Composable de lo campos input
+
+/**
+ * Composable para un campo de entrada de texto con validación y límite de caracteres.
+ *
+ * Este campo permite al usuario ingresar texto con restricciones personalizables, como longitud máxima y
+ * validación de formato. Muestra un mensaje de error cuando el contenido ingresado no cumple con la validación
+ * especificada. El estilo, el color y las opciones del teclado también se pueden personalizar.
+ *
+ * @param value Texto actual del campo de entrada.
+ * @param onValueChange Función de callback que se invoca cuando el texto cambia, pasando el nuevo valor.
+ * @param label Etiqueta que se muestra dentro del campo de entrada cuando está vacío.
+ * @param maxLength Número máximo de caracteres permitidos en el campo.
+ * @param errorMessage Mensaje de error que se muestra cuando el texto no cumple con la validación.
+ * @param validate Función de validación que se utiliza para comprobar si el texto ingresado es válido.
+ * @param keyboardOptions Configuración del teclado, como tipo y acciones de entrada.
+ * @param keyboardActions Acciones del teclado que se activan en ciertos eventos, como "Done".
+ */
 @Composable
 fun InputField(
     value: String,
@@ -711,11 +760,27 @@ fun InputField(
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp)
             )
         }
-
     }
 }
 
-//Composable del CheckBoxOption
+/**
+ * Composable que muestra una lista de opciones con checkbox para configurar la visibilidad de distintos campos en una tarjeta de presentación.
+ *
+ * Cada checkbox representa un campo de datos (como Apellidos, Profesión, Teléfono, LinkedIn y GitHub)
+ * y permite alternar su visibilidad en la tarjeta de presentación. Al marcar o desmarcar un checkbox,
+ * se llama a la función de callback correspondiente para actualizar el estado externo.
+ *
+ * @param showSurname Estado actual de visibilidad del campo "Apellidos".
+ * @param onShowSurnameChange Función de callback que se invoca al cambiar el estado de visibilidad de "Apellidos".
+ * @param showProfession Estado actual de visibilidad del campo "Profesión".
+ * @param onShowProfessionChange Función de callback que se invoca al cambiar el estado de visibilidad de "Profesión".
+ * @param showPhone Estado actual de visibilidad del campo "Teléfono".
+ * @param onShowPhoneChange Función de callback que se invoca al cambiar el estado de visibilidad de "Teléfono".
+ * @param showWeb Estado actual de visibilidad del campo "LinkedIn".
+ * @param onShowWebChange Función de callback que se invoca al cambiar el estado de visibilidad de "LinkedIn".
+ * @param showGitHub Estado actual de visibilidad del campo "GitHub".
+ * @param onShowGitHub Función de callback que se invoca al cambiar el estado de visibilidad de "GitHub".
+ */
 @Composable
 fun CheckBoxOption(
     showSurname: Boolean,
@@ -731,6 +796,7 @@ fun CheckBoxOption(
 
 ) {
     Column {
+        //TODO Añadir checkbox Marcar y Desmarcar Todos
         Text(
             text = "Mostrar Datos",
             style = MaterialTheme.typography.titleMedium.copy(
@@ -780,7 +846,17 @@ fun CheckBoxOption(
     }
 }
 
-//Switch para cambiar entre tema claro y oscuro
+
+/**
+ * Composable para un switch de tema que permite cambiar entre modo claro y modo oscuro.
+ *
+ * Muestra un texto que indica el tema actual ("Tema Claro" o "Tema Oscuro") y un switch que permite al usuario
+ * alternar entre ambos temas. Cambia automáticamente el tema visual de la aplicación al activarse.
+ *
+ * @param isDarkTheme Estado actual del tema. true indica que el tema oscuro está activado.
+ * @param useDarkTheme Función de callback que se invoca cuando se cambia el estado del switch,
+ * actualizando el tema entre claro y oscuro.
+ */
 @Composable
 fun SwitchTheme(
     isDarkTheme: Boolean,
@@ -804,7 +880,16 @@ fun SwitchTheme(
     }
 }
 
-//Componente triStateCheckbox para cambiar el borde de la tarjeta
+/**
+ * Composable para un TriStateCheckbox que controla el estilo del borde de un elemento.
+ *
+ * Este checkbox permite alternar entre tres estados (`Off`, `On`, `Indeterminate`), cada uno de los cuales
+ * aplica un estilo de borde diferente. Los estados de borde incluyen sin borde (`Off`), un borde fino
+ * (`On`) y un borde más grueso (`Indeterminate`), todos en color dorado.
+ *
+ * @param onBorderChange Función de callback que se invoca cada vez que el estado del checkbox cambia,
+ * pasando el estilo de borde actual como `BorderStroke?`.
+ */
 @Composable
 fun TriStateBorder(
     onBorderChange: (BorderStroke?) -> Unit
@@ -832,7 +917,16 @@ fun TriStateBorder(
     )
 }
 
-//Composable radio button para cambiar icono de la tarjeta
+
+/**
+ * Composable que muestra una fila de opciones de iconos mediante RadioButton.
+ *
+ * Cada opción representa un icono diferente, que se selecciona al hacer clic en el botón de radio correspondiente. La opción seleccionada
+ * llama a una función `onOptionSelected` y envía el icono correspondiente como Painter.
+ *
+ * @param onOptionSelected Función de callback que se invoca al seleccionar una opción, proporcionando
+ * el Painter del icono correspondiente a la opción elegida.
+ */
 @Composable
 fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
     val options = mapOf(
@@ -872,7 +966,18 @@ fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
 }
 
 
-//Composable del deplegable para seleccionar imagen de fondo de la BusinessCard
+/**
+ * Composable para un menú desplegable que permite seleccionar una imagen de fondo.
+ *
+ * Muestra un texto que describe la imagen de fondo seleccionada y abre un menú desplegable con
+ * opciones al hacer clic en el área de selección. Cada opción incluye una imagen de fondo con su
+ * descripción, y al seleccionar una opción se invoca una función de callback que actualiza la selección.
+ *
+ * @param selectedImage Imagen de fondo seleccionada actualmente, representada por su recurso ID.
+ * @param onSelectedImage Función de callback que se invoca cuando el usuario selecciona una imagen,
+ *                        pasando el recurso ID de la imagen seleccionada o `null` para la opción predeterminada.
+ * @param backgroundImages Lista de opciones de fondo, cada una representada por un par (recurso de imagen, descripción).
+ */
 @Composable
 fun DropDownMenuBackground(
     selectedImage: Int?,
@@ -885,7 +990,6 @@ fun DropDownMenuBackground(
         backgroundImages.firstOrNull { it.first == selectedImage }?.second
             ?: "Selecciona una imagen de fondo"
     }
-
 
     Box(
         modifier = Modifier.fillMaxWidth()
@@ -922,10 +1026,22 @@ fun DropDownMenuBackground(
                     })
             }
         }
-
     }
 }
 
+/**
+ * Composable que muestra una ProgressBar que refleja el estado de personalización de la tarjeta.
+ *
+ * La barra de progreso se ajusta automáticamente en función de varios factores, incluyendo la lista de valores
+ * ingresados por el usuario, el estado de borde de la tarjeta y la imagen de fondo seleccionada.
+ * A medida que el usuario completa o vacía estos valores, el progreso aumenta o disminuye.
+ *
+ * @param values Lista de valores de texto ingresados en los campos, cuyo contenido afecta el progreso.
+ * @param borderStroke Estado del borde de la tarjeta, que contribuye al progreso al ser modificado.
+ * @param selectedBackgroundImage ID de recurso de la imagen de fondo seleccionada, afectando el progreso cuando se elige una imagen.
+ * @param progressStatus Estado actual del progreso, representado como un valor `Float` entre 0 y 1.
+ * @param onProgressChanged Función de callback que se invoca cuando el progreso cambia, recibiendo el nuevo valor de progreso.
+ */
 @Composable
 fun ProgressBar(
     values: List<String>,
@@ -1001,11 +1117,9 @@ fun ProgressBar(
     }
 }
 
-
-
-
-
-
+/**
+ * Composable para representar el preview
+ */
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun BusinessCardsCreatorPreview() {
@@ -1017,54 +1131,3 @@ fun BusinessCardsCreatorPreview() {
     }
 }
 
-
-//TODO
-/*
-Cambiar web por Linkedin
-Creador de business cards
-Crea una app que permeti confeccionar business cards (targetes de visita).
-Aquesta app ha de disposar dels següents components dins d’una mateixa activitat:
-Implementado
-• Text (Per mostrar missatges a l’usuari)
-   -Mostrar texto a usuario
-
-Implementado
-• TextField (Per tal de que l’usuari introdueixi les seves dades)
-    -Ingresar datos del usuario.
-
-Implementado
-• CheckBox (Per sel·leccionar incloure o no alguna informació; per ex. cognoms,
-càrrec, etc.)
-    -Implementar checkbox para mostrar o ocultar campos de la Card ()
-
-Implementado
-• Switch (Per escollir colors i aspectes gràfics de la targeta)
-    -Probar tema claro y tema oscuro o cambiar entre dos temas predefinidos
-
-Implementado
-• TriState (Per escollir entre tres opcions que decidiu vosaltres)
-    Probar cambiar marco de la Card, por ejemplo: sin borde, borde fino, borde grueso.
-
-
-Falta implementar
-• RadioButton (Per escollir aspectes gràfics de la targeta).
-    -Radio Button para seleccionar tamaño fuente, tipo, color??
-
-Falta Implementar
-• Icon (Per a què l’usuari pugui afegir icones a la seva targeta: estrelles, casetes, etc.)
-    -Permitir añadir iconos, usar LAzyRow?
-
-Implementado
-• Image (Per tal de que l’usuari pugui afegir una imatge de fons a la targeta. Podem
-tenir 4 imatges de fons predefinides que no interfereixin amb la lectura del contingut i
-que l’usuari les esculli amb algun dels components anteriors)
-    -Imagenes predefinidas como opciones de fondo o de logo, puede estar en un Row o LazyRow con
-     RadioButton o Icon para selecionar las imagenes.
-
-• Card (Per confeccionar la targeta a sota de les opcions anteriors)
-    -Implemetar vista zoom?
-
- Falta Implementar
-• Progress Indicator (per mostrar l’avenç en la creació de la targeta fins a acabar-la)
-    -Implementar Progress Indicator en la parte superior de la BussinessCard.
- */
