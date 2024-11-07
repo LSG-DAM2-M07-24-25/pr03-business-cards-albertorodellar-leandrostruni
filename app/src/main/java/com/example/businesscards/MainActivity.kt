@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -79,8 +80,16 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import kotlin.math.max
 
 class MainActivity : ComponentActivity() {
@@ -133,9 +142,9 @@ fun BusinessCardsCreator(
     //Lista para las imagenes de backgroud
     val backgroundImages = listOf(
         null to "Fondo predeterminado",
-        R.drawable.background_1 to "Opción 1",
-        R.drawable.background_2 to "Opción 2",
-        R.drawable.background_3 to "Opción 3"
+        R.drawable.background_1 to "Turquesa",
+        R.drawable.background_2 to "Verde Oliva",
+        R.drawable.background_3 to "Azul Claro"
     )
 
     //Estado para la imagen de fondo
@@ -158,6 +167,22 @@ fun BusinessCardsCreator(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
+
+
+            Text(
+                text = "Bussines Card Creator",
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    fontSize = 30.sp
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+
+            )
+
             //BussinesCard que se actualiza en tiempo real
             BussinesCard(
                 icon = selectedIcon!!,
@@ -199,9 +224,15 @@ fun BusinessCardsCreator(
                     .padding(horizontal = 16.dp)
                     .zIndex(0f),
             ) {
+
                 item{
                     Text(
-                        text = "Cambiar icono de la tarjeta"
+                        text = "Cambiar Icono de la tarjeta",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.15.sp
+                        )
                     )
                     RadioButtonRow { icon ->
                         selectedIcon = icon
@@ -217,7 +248,7 @@ fun BusinessCardsCreator(
                     InputField(
                         value = name,
                         onValueChange = { name = it },
-                        label = "Ingrese su Nombre: ",
+                        label = "Nombre: ",
                         maxLength = 25,
                         errorMessage = "El nombre solo debe contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
@@ -233,7 +264,7 @@ fun BusinessCardsCreator(
                     InputField(
                         value = surname,
                         onValueChange = { surname = it },
-                        label = "Ingrese su Apellido: ",
+                        label = "Apellidos: ",
                         maxLength = 25,
                         errorMessage = "El Apellido solo puede contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
@@ -250,10 +281,10 @@ fun BusinessCardsCreator(
                     InputField(
                         value = profession,
                         onValueChange = { profession = it },
-                        label = "Ingrese su Profesión: ",
-                        maxLength = 22,
+                        label = "Profesión: ",
+                        maxLength = 25,
                         errorMessage = "La profesión solo puede contener letras.",
-                        validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                        validate = { it.trimEnd().matches(Regex("^[a-zA-Z\\s]+\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -267,9 +298,9 @@ fun BusinessCardsCreator(
                     InputField(
                         value = phone,
                         onValueChange = { phone = it },
-                        label = "Ingrese su Teléfono: ",
+                        label = "Teléfono: ",
                         maxLength = 20,
-                        errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
+                        errorMessage = "El teléfono tiene que empezar con el formato +34.",
                         validate = { it.matches(Regex("^\\+\\d{1,3} ?\\d{6,14}\$")) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
@@ -287,7 +318,7 @@ fun BusinessCardsCreator(
                     InputField(
                         value = email,
                         onValueChange = { email = it },
-                        label = "Ingrese su Email: ",
+                        label = "Email: ",
                         maxLength = 50,
                         errorMessage = "El Email no tiene el fórmato válido.",
                         validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
@@ -299,15 +330,15 @@ fun BusinessCardsCreator(
                 }
 
 
-                //TextField web
+                //TextField LinkdIn
                 item {
                     InputField(
                         value = web,
                         onValueChange = { web = it },
-                        label = "Ingrese su Página Web: ",
+                        label = "Usuario LinkedIn: ",
                         maxLength = 50,
-                        errorMessage = "La dirección Web no tiene el formato válido",
-                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
+                        errorMessage = "El nombre de usuario solo puede contener letras, números o guiones.",
+                        validate = { it.matches(Regex("^[a-zA-Z0-9-]{3,47}\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -320,7 +351,7 @@ fun BusinessCardsCreator(
                     InputField(
                         value = github,
                         onValueChange = { github = it },
-                        label = "Ingrese su perfil de GitHub: ",
+                        label = "Usuario GitHub: ",
                         maxLength = 39,
                         errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
                         validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
@@ -358,7 +389,12 @@ fun BusinessCardsCreator(
                 //Sección Switch
                 item {
                     Text(
-                        text = "Cambiar entre Modo Claro o Modo Oscuro"
+                        text = "Cambiar entre Modo Claro o Modo Oscuro",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.15.sp
+                        )
                     )
                     SwitchTheme(
                         isDarkTheme = isDarkTheme,
@@ -373,7 +409,12 @@ fun BusinessCardsCreator(
                 //Sección del Tristate
                 item {
                     Text(
-                        text = "Cambiar el borde de la tarjeta"
+                        text = "Cambiar el borde de la tarjeta",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.15.sp
+                        )
                     )
                     TriStateBorder(onBorderChange = { newBorder ->
                         borderStroke = newBorder
@@ -383,13 +424,21 @@ fun BusinessCardsCreator(
 
                 item {
                     Text(
-                        text = "Seleccionar el fondo de la tarjeta"
+                        text = "Seleccionar el fondo de la tarjeta",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.15.sp
+                        )
                     )
                     DropDownMenuBackground(
                         selectedImage = selectedBackgroundImage,
                         onSelectedImage = { selectedBackgroundImage = it },
                         backgroundImages = backgroundImages
                     )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }
@@ -460,7 +509,7 @@ fun BussinesCard(
                         .padding(16.dp)
                         .weight(1f)
                     //.padding(end = 8.dp)
-                    ,horizontalAlignment = Alignment.CenterHorizontally
+                    , horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
                     Icon(
@@ -468,7 +517,8 @@ fun BussinesCard(
                         contentDescription = "Business Card Icon",
                         modifier = Modifier
                             .padding(8.dp)
-                            .size(80.dp)
+                            .size(80.dp),
+                        tint = Color(0xFF333333)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -509,7 +559,7 @@ fun BussinesCard(
                         .fillMaxWidth()
                         .fillMaxHeight()
                         .weight(1f)
-                        .padding(16.dp),
+                        .padding(start = 5.dp, top = 16.dp, end = 16.dp, bottom = 16.dp),
                     horizontalAlignment = Alignment.Start,
 
                     //.padding(start = 8.dp)
@@ -525,7 +575,8 @@ fun BussinesCard(
                             Icon(
                                 imageVector = Icons.Default.Phone,
                                 contentDescription = "Phone Icon",
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = Color(0xFF333333)
                             )
                             Text(
                                 text = phone.ifEmpty { "Teléfono" },
@@ -544,7 +595,8 @@ fun BussinesCard(
                         Icon(
                             imageVector = Icons.Default.Email,
                             contentDescription = "Email Icon",
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
+                            tint = Color(0xFF333333)
                         )
                         Text(
                             text = email.ifEmpty { "Email" },
@@ -563,10 +615,11 @@ fun BussinesCard(
                             Icon(
                                 painter = painterResource(id = R.drawable.linkedin_icon),
                                 contentDescription = "Linkedin Icon",
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = Color(0xFF333333)
                             )
                             Text(
-                                text = web.ifEmpty { "Web" },
+                                text = web.ifEmpty { "LinkedIn" },
                                 color = Color.Black,
                             )
                         }
@@ -583,14 +636,14 @@ fun BussinesCard(
                             Icon(
                                 painter = painterResource(id = R.drawable.github_icon),
                                 contentDescription = "Github Icon",
-                                modifier = Modifier.size(24.dp)
+                                modifier = Modifier.size(24.dp),
+                                tint = Color(0xFF333333)
                             )
                             Text(
-                                text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                                text = github.ifEmpty { "GitHub" },
                                 color = Color.Black,
                             )
                         }
-
                     }
                 }
             }
@@ -615,10 +668,10 @@ fun InputField(
 
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        TextField(
+        OutlinedTextField(
             value = tempValue,
             onValueChange = { input ->
-                if(input.length <= maxLength){
+                if (input.length <= maxLength) {
                     tempValue = input
                     if (validate(input) || input.isEmpty()) {
                         onValueChange(input)
@@ -629,12 +682,23 @@ fun InputField(
                 }
             },
             label = { Text(label) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
             isError = isError,
+            singleLine = true,
             keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions
+            keyboardActions = keyboardActions,
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                cursorColor = if (isError) Color.Red else MaterialTheme.colorScheme.primary,
+                errorCursorColor = Color.Red,
+                errorIndicatorColor = Color.Red
+            ),
 
-        )
+            )
         if (isError && errorMessage != null) {
             Text(
                 text = errorMessage,
@@ -663,7 +727,14 @@ fun CheckBoxOption(
 
 ) {
     Column {
-        Text("Mostrar Datos")
+        Text(
+            text = "Mostrar Datos",
+            style = MaterialTheme.typography.titleMedium.copy(
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.15.sp
+            )
+        )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
@@ -693,7 +764,7 @@ fun CheckBoxOption(
                 checked = showWeb,
                 onCheckedChange = onShowWebChange
             )
-            Text(text = "Mostrar Web")
+            Text(text = "Mostrar LinkedIn")
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
@@ -738,8 +809,8 @@ fun TriStateBorder(
 
     var borderStroke = when (checkboxState) {
         ToggleableState.Off -> null
-        ToggleableState.On -> BorderStroke(2.dp, Color.Black)
-        ToggleableState.Indeterminate -> BorderStroke(4.dp, Color.Black)
+        ToggleableState.On -> BorderStroke(2.dp, Color(0xFFB8860B))
+        ToggleableState.Indeterminate -> BorderStroke(4.dp, Color(0xFFB8860B))
     }
 
     onBorderChange(borderStroke)
@@ -789,7 +860,7 @@ fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
                 Icon(
                     painter = iconPainter,
                     contentDescription = option,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
             }
         }
@@ -817,17 +888,25 @@ fun DropDownMenuBackground(
     ) {
         Text(
             text = selectedImageDescription,
+            color = Color.Black,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.LightGray)
-                .padding(16.dp)
+                .background(
+                    color = Color(0xFFF1F1F1),
+                    shape = RoundedCornerShape(12.dp)
+
+                )
+                .border(1.dp, Color.Gray, RoundedCornerShape(12.dp))
+                .padding(vertical = 12.dp, horizontal = 16.dp)
                 .clickable { expanded = !expanded }
         )
 
         //Desplegable
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .padding(4.dp)
         ) {
             backgroundImages.forEach { (imageRes, description) ->
                 DropdownMenuItem(
