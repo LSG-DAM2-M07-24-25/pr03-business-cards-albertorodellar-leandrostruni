@@ -253,7 +253,7 @@ fun BusinessCardsCreator(
                         onValueChange = { web = it },
                         label = "Ingrese su Página Web: ",
                         errorMessage = "La dirección Web no tiene el formato válido",
-                        validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
+                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -720,36 +720,48 @@ Cambiar web por Linkedin
 Creador de business cards
 Crea una app que permeti confeccionar business cards (targetes de visita).
 Aquesta app ha de disposar dels següents components dins d’una mateixa activitat:
+Implementado
 • Text (Per mostrar missatges a l’usuari)
    -Mostrar texto a usuario
 
+Implementado
 • TextField (Per tal de que l’usuari introdueixi les seves dades)
     -Ingresar datos del usuario.
 
+Implementado
 • CheckBox (Per sel·leccionar incloure o no alguna informació; per ex. cognoms,
 càrrec, etc.)
     -Implementar checkbox para mostrar o ocultar campos de la Card ()
 
+Implementado
 • Switch (Per escollir colors i aspectes gràfics de la targeta)
     -Probar tema claro y tema oscuro o cambiar entre dos temas predefinidos
 
+Implementado
 • TriState (Per escollir entre tres opcions que decidiu vosaltres)
     Probar cambiar marco de la Card, por ejemplo: sin borde, borde fino, borde grueso.
 
+
+Falta implementar
 • RadioButton (Per escollir aspectes gràfics de la targeta).
     -Radio Button para seleccionar tamaño fuente, tipo, color??
 
+Falta Implementar
 • Icon (Per a què l’usuari pugui afegir icones a la seva targeta: estrelles, casetes, etc.)
     -Permitir añadir iconos, usar LAzyRow?
 
+Implementado
 • Image (Per tal de que l’usuari pugui afegir una imatge de fons a la targeta. Podem
 tenir 4 imatges de fons predefinides que no interfereixin amb la lectura del contingut i
 que l’usuari les esculli amb algun dels components anteriors)
     -Imagenes predefinidas como opciones de fondo o de logo, puede estar en un Row o LazyRow con
      RadioButton o Icon para selecionar las imagenes.
 
+
 • Card (Per confeccionar la targeta a sota de les opcions anteriors)
     -Implemetar vista zoom?
+
+ Falta Implementar
 • Progress Indicator (per mostrar l’avenç en la creació de la targeta fins a acabar-la)
     -Implementar Progress Indicator en la parte superior de la BussinessCard.
  */
