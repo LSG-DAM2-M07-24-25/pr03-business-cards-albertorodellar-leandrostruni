@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -74,6 +76,10 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldColors
@@ -149,13 +155,15 @@ fun BusinessCardsCreator(
     if (selectedIcon == null) {
         selectedIcon = painterResource(id = R.drawable.user)
     }
+
+    //Estado para la progress bar
+    var progressStatus by remember { mutableFloatStateOf(0f) }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .clickable { keyboardController?.hide() }
     ) {
-
-        //Progress bar implemetar
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -197,6 +205,15 @@ fun BusinessCardsCreator(
                     .zIndex(1f)
 
             )
+            ProgressBar(
+                values = listOf(name, email),
+                borderStroke = borderStroke,
+                selectedBackgroundImage = selectedBackgroundImage,
+                progressStatus = progressStatus,
+                onProgressChanged = { newProgress ->
+                    progressStatus = newProgress
+                }
+            )
 
             Spacer(modifier = Modifier.height(6.dp))
 
@@ -208,7 +225,7 @@ fun BusinessCardsCreator(
                     .zIndex(0f),
             ) {
 
-                item {
+                item{
                     Text(
                         text = "Cambiar Icono de la tarjeta",
                         style = MaterialTheme.typography.titleMedium.copy(
@@ -824,7 +841,7 @@ fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(24.dp)
+        horizontalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         options.forEach { (option, iconRes) ->
 
@@ -904,6 +921,77 @@ fun DropDownMenuBackground(
 
     }
 }
+
+@Composable
+fun ProgressBar(
+    values: List<String>,
+    borderStroke: BorderStroke?,
+    selectedBackgroundImage: Int?,
+    progressStatus: Float,
+    onProgressChanged: (Float) -> Unit
+) {
+    val previousValues = remember { mutableStateOf(values) }
+    val previousBorderStroke = remember { mutableStateOf(borderStroke) }
+    val previousBackgroundImage = remember { mutableStateOf(selectedBackgroundImage) }
+
+    LaunchedEffect(values, borderStroke, selectedBackgroundImage) {
+        var newProgress = progressStatus
+
+        // Revisa valores de la lista values
+        values.forEachIndexed { index, value ->
+            val previousValue = previousValues.value.getOrElse(index) { "" }
+            if (value.isNotEmpty() && previousValue.isEmpty()) {
+                newProgress = (newProgress + 0.25f).coerceAtMost(1f)
+            } else if (value.isEmpty() && previousValue.isNotEmpty()) {
+                newProgress = (newProgress - 0.25f).coerceAtLeast(0f)
+            }
+        }
+
+        // Revisa el borderStroke del tristate
+        if (borderStroke != null && previousBorderStroke.value == null) {
+            newProgress = (newProgress + 0.25f).coerceAtMost(1f)
+        } else if (borderStroke == null && previousBorderStroke.value != null) {
+            newProgress = (newProgress - 0.25f).coerceAtLeast(0f)
+        }
+
+        //Revisa el selectedBackgroundImage del desplegable
+        if (selectedBackgroundImage != null && previousBackgroundImage.value == null) {
+            newProgress = (newProgress + 0.25f).coerceAtMost(1f)
+        } else if (selectedBackgroundImage == null && previousBackgroundImage.value != null) {
+            newProgress = (newProgress - 0.25f).coerceAtLeast(0f)
+        }
+
+        // Actualizamos el progreso y los valores previos
+        onProgressChanged(newProgress)
+        previousValues.value = values
+        previousBorderStroke.value = borderStroke
+        previousBackgroundImage.value = selectedBackgroundImage
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            text = "Progreso: ${(progressStatus * 100).toInt()}%",
+            modifier = Modifier.padding(start = 16.dp)
+        )
+        LinearProgressIndicator(
+            progress = progressStatus,
+            modifier = Modifier
+                .padding(24.dp)
+                .height(24.dp)
+                .width(500.dp),
+            color = Color.Black,
+            trackColor = Color.LightGray,
+            strokeCap = StrokeCap.Butt
+        )
+    }
+}
+
+
+
 
 
 @Preview(showBackground = true, showSystemUi = true)
