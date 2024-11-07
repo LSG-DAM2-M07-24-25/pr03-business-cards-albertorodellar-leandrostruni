@@ -72,7 +72,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import kotlin.math.max
 import com.example.businesscards.ui.theme.ProgressRed
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -896,7 +895,7 @@ fun TriStateBorder(
 ) {
     var checkboxState by rememberSaveable { mutableStateOf(ToggleableState.Off) }
 
-    var borderStroke = when (checkboxState) {
+    val borderStroke = when (checkboxState) {
         ToggleableState.Off -> null
         ToggleableState.On -> BorderStroke(2.dp, Color(0xFFB8860B))
         ToggleableState.Indeterminate -> BorderStroke(4.dp, Color(0xFFB8860B))
@@ -1050,15 +1049,15 @@ fun ProgressBar(
     progressStatus: Float,
     onProgressChanged: (Float) -> Unit
 ) {
-    // Recordamos el estado anterior de cada valor
     val previousValues = remember { mutableStateOf(values) }
     val previousBorderStroke = remember { mutableStateOf(borderStroke) }
     val previousBackgroundImage = remember { mutableStateOf(selectedBackgroundImage) }
 
-    // Usamos animateFloatAsState para animar el progreso
+    // Animacion
     val animatedProgress = animateFloatAsState(
         targetValue = progressStatus,
-        animationSpec = tween(durationMillis = 500) // Ajusta la duración de la animación
+        animationSpec = tween(durationMillis = 500),
+        label = ""
     )
 
     LaunchedEffect(values, borderStroke, selectedBackgroundImage) {
@@ -1088,7 +1087,7 @@ fun ProgressBar(
             newProgress = (newProgress - 0.25f).coerceAtLeast(0f)
         }
 
-        // Actualizamos el progreso y los valores previos
+        // Actualiza valores
         onProgressChanged(newProgress)
         previousValues.value = values
         previousBorderStroke.value = borderStroke
@@ -1105,14 +1104,16 @@ fun ProgressBar(
             modifier = Modifier.padding(start = 16.dp)
         )
         LinearProgressIndicator(
-            progress = animatedProgress.value, // Usa el valor animado
+            progress = {
+                animatedProgress.value
+            },
             modifier = Modifier
                 .padding(24.dp)
                 .height(24.dp)
                 .width(500.dp),
             color = ProgressRed,
             trackColor = Color.LightGray,
-            strokeCap = StrokeCap.Butt
+            strokeCap = StrokeCap.Butt,
         )
     }
 }
