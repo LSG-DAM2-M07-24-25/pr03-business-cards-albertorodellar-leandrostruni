@@ -204,9 +204,9 @@ fun BusinessCardsCreator(
                         value = profession,
                         onValueChange = { profession = it },
                         label = "Ingrese su Profesión: ",
-                        maxLength = 22,
+                        maxLength = 25,
                         errorMessage = "La profesión solo puede contener letras.",
-                        validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
+                        validate = { it.trimEnd().matches(Regex("^[a-zA-Z\\s]+\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -260,7 +260,7 @@ fun BusinessCardsCreator(
                         label = "Ingrese su Página Web: ",
                         maxLength = 50,
                         errorMessage = "La dirección Web no tiene el formato válido",
-                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
+                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -534,7 +534,7 @@ fun InputField(
         TextField(
             value = tempValue,
             onValueChange = { input ->
-                if(input.length <= maxLength){
+                if (input.length <= maxLength) {
                     tempValue = input
                     if (validate(input) || input.isEmpty()) {
                         onValueChange(input)
