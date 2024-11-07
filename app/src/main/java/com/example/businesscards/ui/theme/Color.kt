@@ -20,7 +20,7 @@ val DarkSurfaceColor = Color(0xFF1F292D)
 val DarkOnPrimary = Color(0xFFB3ECE8)
 val DarkOnSecondary = Color(0xFFD4F1E8)
 
-
+val ProgressRed = Color(0xFFFF4444)
 
 
 //Tema por defecto
