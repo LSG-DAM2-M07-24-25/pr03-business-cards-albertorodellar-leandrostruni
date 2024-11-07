@@ -5,8 +5,17 @@ import androidx.compose.ui.graphics.Color
 //Colores para el tema claro
 val LightPrimaryColor = Color(0xFF03A9F4)
 val LightSecondaryColor = Color(0xFFFFC107)
-val LightBackgroundColor = Color(0xFFF1F8FF)
+val LightBackgroundColor = Color(0xFFD8EBFF)
 val LightSurfaceColor = Color.White
+
+/*
+val LightBackgroundColor = Color(0xFFF1F8FF)
+
+val PastelBlueLight = Color(0xFFE3F2FD) // Un azul claro pastel
+val SoftLavenderBlue = Color(0xFFEBF5FB) // Azul con un toque de lavanda, muy suave
+val SoftSkyBlue = Color(0xFFDDECFD) // Azul celeste suave, muy cercano al blanco
+*/
+
 
 //Colores para el tema oscuro
 val DarkPrimaryColor = Color(0xFF81D4FA)
