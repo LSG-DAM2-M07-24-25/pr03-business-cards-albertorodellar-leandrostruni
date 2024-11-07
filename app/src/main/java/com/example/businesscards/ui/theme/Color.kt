@@ -1,27 +1,26 @@
 package com.example.businesscards.ui.theme
 
+import android.hardware.lights.Light
 import androidx.compose.ui.graphics.Color
 
 //Colores para el tema claro
-val LightPrimaryColor = Color(0xFF03A9F4)
-val LightSecondaryColor = Color(0xFFFFC107)
-val LightBackgroundColor = Color(0xFFD8EBFF)
-val LightSurfaceColor = Color.White
-
-/*
-val LightBackgroundColor = Color(0xFFF1F8FF)
-
-val PastelBlueLight = Color(0xFFE3F2FD) // Un azul claro pastel
-val SoftLavenderBlue = Color(0xFFEBF5FB) // Azul con un toque de lavanda, muy suave
-val SoftSkyBlue = Color(0xFFDDECFD) // Azul celeste suave, muy cercano al blanco
-*/
+val LightPrimaryColor = Color(0xFF81D8D0)
+val LightSecondaryColor = Color(0xFFC7EFCF)
+val LightBackgroundColor = Color(0xFFEBF5F7)
+val LightSurfaceColor = Color(0xFFFFFFFF)
+val LightOnPrimary = Color(0xFF124B51)
+val LightOnSecondary = Color(0xFF355D3C)
 
 
 //Colores para el tema oscuro
-val DarkPrimaryColor = Color(0xFF81D4FA)
-val DarkSecondaryColor = Color(0xFFFFECB3)
-val DarkBackgroundColor = Color(0xFF121212)
-val DarkSurfaceColor = Color(0xFF1E1E1E)
+val DarkPrimaryColor = Color(0xFF3D6B7F)
+val DarkSecondaryColor = Color(0xFF497B61)
+val DarkBackgroundColor = Color(0xFF121A1E)
+val DarkSurfaceColor = Color(0xFF1F292D)
+val DarkOnPrimary = Color(0xFFB3ECE8)
+val DarkOnSecondary = Color(0xFFD4F1E8)
+
+
 
 
 //Tema por defecto

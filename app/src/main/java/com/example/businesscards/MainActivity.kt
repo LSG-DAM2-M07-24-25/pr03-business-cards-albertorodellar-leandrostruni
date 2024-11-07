@@ -373,15 +373,15 @@ fun BussinesCard(
     )
     {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Fondo de imagen en el `Box` detrás del contenido
+            //Fondo de imagen en el Box detrás del contenido
             if (backgroundImage != null) {
                 Image(
                     painter = painterResource(id = backgroundImage),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop, // Ajusta la imagen para cubrir toda el área
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(16.dp)) // Aplica el recorte redondeado
+                        .clip(RoundedCornerShape(16.dp))
                 )
             } else {
                 Box(
@@ -420,6 +420,7 @@ fun BussinesCard(
 
                     Text(
                         text = name.ifEmpty { "Nombre" },
+                        color = Color.Black,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
@@ -428,6 +429,7 @@ fun BussinesCard(
                     if (showSurname) {
                         Text(
                             text = surname.ifEmpty { "Apellidos" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
@@ -437,6 +439,7 @@ fun BussinesCard(
                     if (showProfession) {
                         Text(
                             text = profession.ifEmpty { "Profesión" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
@@ -459,6 +462,7 @@ fun BussinesCard(
                     if (showPhone) {
                         Text(
                             text = phone.ifEmpty { "Teléfono" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
@@ -468,6 +472,7 @@ fun BussinesCard(
 
                     Text(
                         text = email.ifEmpty { "Email" },
+                        color = Color.Black,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
@@ -477,6 +482,7 @@ fun BussinesCard(
                     if (showWeb) {
                         Text(
                             text = web.ifEmpty { "Web" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
@@ -487,6 +493,7 @@ fun BussinesCard(
                     if (showGitHub) {
                         Text(
                             text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)

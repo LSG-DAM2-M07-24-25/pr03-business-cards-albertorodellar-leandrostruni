@@ -12,30 +12,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-
-    primary = DarkPrimaryColor,
-    secondary = DarkSecondaryColor,
-    background = DarkBackgroundColor,
-    surface = DarkSurfaceColor,
-    onPrimary = Color.Black,
-    onSecondary = Color.Black,
-    onBackground = Color.White,
-    onSurface = Color.White
-
-
-)
 
 private val LightColorScheme = lightColorScheme(
     primary = LightPrimaryColor,
     secondary = LightSecondaryColor,
     background = LightBackgroundColor,
     surface = LightSurfaceColor,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
+    onPrimary = LightOnPrimary,
+    onSecondary = LightOnSecondary,
     onBackground = Color.Black,
     onSurface = Color.Black
 )
+
+private val DarkColorScheme = darkColorScheme(
+
+    primary = DarkPrimaryColor,
+    secondary = DarkSecondaryColor,
+    background = DarkBackgroundColor,
+    surface = DarkSurfaceColor,
+    onPrimary = DarkOnPrimary,
+    onSecondary = DarkOnSecondary,
+    onBackground = Color.White,
+    onSurface = Color.White
+
+)
+
+
 
 @Composable
 fun BusinessCardsTheme(
