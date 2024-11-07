@@ -72,6 +72,11 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import kotlin.math.max
+import com.example.businesscards.ui.theme.ProgressRed
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+
 
 
 /**
@@ -1045,14 +1050,21 @@ fun ProgressBar(
     progressStatus: Float,
     onProgressChanged: (Float) -> Unit
 ) {
+    // Recordamos el estado anterior de cada valor
     val previousValues = remember { mutableStateOf(values) }
     val previousBorderStroke = remember { mutableStateOf(borderStroke) }
     val previousBackgroundImage = remember { mutableStateOf(selectedBackgroundImage) }
 
+    // Usamos animateFloatAsState para animar el progreso
+    val animatedProgress = animateFloatAsState(
+        targetValue = progressStatus,
+        animationSpec = tween(durationMillis = 500) // Ajusta la duración de la animación
+    )
+
     LaunchedEffect(values, borderStroke, selectedBackgroundImage) {
         var newProgress = progressStatus
 
-        // Revisa valores de la lista values
+        // Revisa los valores de la lista 'values'
         values.forEachIndexed { index, value ->
             val previousValue = previousValues.value.getOrElse(index) { "" }
             if (value.isNotEmpty() && previousValue.isEmpty()) {
@@ -1062,14 +1074,14 @@ fun ProgressBar(
             }
         }
 
-        // Revisa el borderStroke del tristate
+        // Revisa el 'borderStroke'
         if (borderStroke != null && previousBorderStroke.value == null) {
             newProgress = (newProgress + 0.25f).coerceAtMost(1f)
         } else if (borderStroke == null && previousBorderStroke.value != null) {
             newProgress = (newProgress - 0.25f).coerceAtLeast(0f)
         }
 
-        //Revisa el selectedBackgroundImage del desplegable
+        // Revisa el 'selectedBackgroundImage'
         if (selectedBackgroundImage != null && previousBackgroundImage.value == null) {
             newProgress = (newProgress + 0.25f).coerceAtMost(1f)
         } else if (selectedBackgroundImage == null && previousBackgroundImage.value != null) {
@@ -1089,22 +1101,21 @@ fun ProgressBar(
             .padding(horizontal = 16.dp)
     ) {
         Text(
-            text = "Progreso: ${(progressStatus * 100).toInt()}%",
+            text = "Progreso: ${(animatedProgress.value * 100).toInt()}%",
             modifier = Modifier.padding(start = 16.dp)
         )
         LinearProgressIndicator(
-            progress = progressStatus,
+            progress = animatedProgress.value, // Usa el valor animado
             modifier = Modifier
                 .padding(24.dp)
                 .height(24.dp)
                 .width(500.dp),
-            color = Color.Black,
+            color = ProgressRed,
             trackColor = Color.LightGray,
             strokeCap = StrokeCap.Butt
         )
     }
 }
-
 
 /**
  * Composable para representar el preview
@@ -1119,3 +1130,4 @@ fun BusinessCardsCreatorPreview() {
         )
     }
 }
+
