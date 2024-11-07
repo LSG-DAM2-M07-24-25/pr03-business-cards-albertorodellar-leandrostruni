@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,6 +33,7 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -61,6 +63,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
 import com.example.businesscards.ui.theme.LightBackgroundColor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import kotlin.math.max
 
 class MainActivity : ComponentActivity() {
@@ -121,7 +135,11 @@ fun BusinessCardsCreator(
     //Estado para la imagen de fondo
     var selectedBackgroundImage by rememberSaveable { mutableStateOf<Int?>(null) }
 
-
+    //Estado para el icono de perfil
+    var selectedIcon by remember { mutableStateOf<Painter?>(null) }
+    if (selectedIcon == null) {
+        selectedIcon = painterResource(id = R.drawable.user)
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -134,7 +152,7 @@ fun BusinessCardsCreator(
         ) {
             //BussinesCard que se actualiza en tiempo real
             BussinesCard(
-                imageLogo = R.drawable.test_image,
+                icon = selectedIcon!!,
                 name = name,
                 surname = surname,
                 showSurname = showSurname,
@@ -165,7 +183,20 @@ fun BusinessCardsCreator(
                     .zIndex(0f),
             ) {
 
-                //TextFielD Nombre
+                item{
+                    Text(
+                        text = "Cambiar icono de la tarjeta"
+                    )
+                    RadioButtonRow { icon ->
+                        selectedIcon = icon
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+
+                //TextField Nombre
                 item {
                     InputField(
                         value = name,
@@ -365,7 +396,7 @@ fun BussinesCard(
     showWeb: Boolean,
     github: String,
     showGitHub: Boolean,
-    imageLogo: Int,
+    icon: Painter,
     borderStroke: BorderStroke,
     backgroundImage: Int?,
     modifier: Modifier = Modifier
@@ -406,22 +437,22 @@ fun BussinesCard(
                     .fillMaxHeight()
 
             ) {
-                //Culumna seccion izquierda
+                //Columna seccion izquierda
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
                         .weight(1f)
                     //.padding(end = 8.dp)
+                    ,horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-                    Image(
-                        painter = painterResource(id = imageLogo),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
+                    Icon(
+                        painter = icon,
+                        contentDescription = "Business Card Icon",
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp)
+                            .padding(8.dp)
+                            .size(80.dp)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -468,45 +499,82 @@ fun BussinesCard(
                     //.padding(start = 8.dp)
                 ) {
                     if (showPhone) {
-                        Text(
-                            text = phone.ifEmpty { "Teléfono" },
-                            color = Color.Black,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
-                                .padding(top = 20.dp)
-                        )
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Phone,
+                                contentDescription = "Phone Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(
+                                text = phone.ifEmpty { "Teléfono" },
+                                color = Color.Black,
+                            )
+                        }
                     }
 
-                    Text(
-                        text = email.ifEmpty { "Email" },
-                        color = Color.Black,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .padding(top = 20.dp)
-                    )
-
-                    if (showWeb) {
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Email,
+                            contentDescription = "Email Icon",
+                            modifier = Modifier.size(24.dp)
+                        )
                         Text(
-                            text = web.ifEmpty { "Web" },
+                            text = email.ifEmpty { "Email" },
                             color = Color.Black,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .padding(top = 20.dp)
                         )
                     }
 
-                    if (showGitHub) {
-                        Text(
-                            text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
-                            color = Color.Black,
+                    if (showWeb) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
-                                .padding(top = 20.dp)
-                        )
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.linkedin_icon),
+                                contentDescription = "Linkedin Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(
+                                text = web.ifEmpty { "Web" },
+                                color = Color.Black,
+                            )
+                        }
+                    }
+
+                    if (showGitHub) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.github_icon),
+                                contentDescription = "Github Icon",
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Text(
+                                text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                                color = Color.Black,
+                            )
+                        }
+
                     }
                 }
             }
@@ -673,7 +741,51 @@ fun TriStateBorder(
     )
 }
 
-//Composable desl depleglabe para seleccionas imagen de fonde de la CardBussines
+//Composable radio button para cambiar icono de la tarjeta
+@Composable
+fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
+    val options = mapOf(
+        "Default" to R.drawable.user,
+        "Tie" to R.drawable.user_tie,
+        "Doctor" to R.drawable.user_doctor,
+        "Astronaut" to R.drawable.user_astronaut,
+    )
+    var selectedOption by remember { mutableStateOf("Default") }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(24.dp)
+    ) {
+        options.forEach { (option, iconRes) ->
+
+            //Carga aqui el painter porque sino peta
+            val iconPainter = painterResource(id = iconRes)
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                RadioButton(
+                    selected = selectedOption == option,
+                    onClick = {
+                        selectedOption = option
+                        // Llamamos a onOptionSelected pasándole el Painter cargado
+                        onOptionSelected(iconPainter)
+                    }
+                )
+                Icon(
+                    painter = iconPainter,
+                    contentDescription = option,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    }
+}
+
+
+
+
+
+
+//Composable del deplegable para seleccionar imagen de fondo de la BusinessCard
 @Composable
 fun DropDownMenuBackground(
     selectedImage: Int?,
