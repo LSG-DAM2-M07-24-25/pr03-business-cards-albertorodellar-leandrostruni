@@ -75,6 +75,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlin.math.max
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -201,6 +202,7 @@ fun BusinessCardsCreator(
                         value = name,
                         onValueChange = { name = it },
                         label = "Ingrese su Nombre: ",
+                        maxLength = 25,
                         errorMessage = "El nombre solo debe contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -216,6 +218,7 @@ fun BusinessCardsCreator(
                         value = surname,
                         onValueChange = { surname = it },
                         label = "Ingrese su Apellido: ",
+                        maxLength = 25,
                         errorMessage = "El Apellido solo puede contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -232,6 +235,7 @@ fun BusinessCardsCreator(
                         value = profession,
                         onValueChange = { profession = it },
                         label = "Ingrese su Profesión: ",
+                        maxLength = 22,
                         errorMessage = "La profesión solo puede contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -248,8 +252,9 @@ fun BusinessCardsCreator(
                         value = phone,
                         onValueChange = { phone = it },
                         label = "Ingrese su Teléfono: ",
+                        maxLength = 20,
                         errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
-                        validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
+                        validate = { it.matches(Regex("^\\+\\d{1,3} ?\\d{6,14}\$")) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Done
@@ -267,6 +272,7 @@ fun BusinessCardsCreator(
                         value = email,
                         onValueChange = { email = it },
                         label = "Ingrese su Email: ",
+                        maxLength = 50,
                         errorMessage = "El Email no tiene el fórmato válido.",
                         validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -283,6 +289,7 @@ fun BusinessCardsCreator(
                         value = web,
                         onValueChange = { web = it },
                         label = "Ingrese su Página Web: ",
+                        maxLength = 50,
                         errorMessage = "La dirección Web no tiene el formato válido",
                         validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -298,6 +305,7 @@ fun BusinessCardsCreator(
                         value = github,
                         onValueChange = { github = it },
                         label = "Ingrese su perfil de GitHub: ",
+                        maxLength = 39,
                         errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
                         validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -404,15 +412,15 @@ fun BussinesCard(
     )
     {
         Box(modifier = Modifier.fillMaxSize()) {
-            // Fondo de imagen en el `Box` detrás del contenido
+            //Fondo de imagen en el Box detrás del contenido
             if (backgroundImage != null) {
                 Image(
                     painter = painterResource(id = backgroundImage),
                     contentDescription = null,
-                    contentScale = ContentScale.Crop, // Ajusta la imagen para cubrir toda el área
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(16.dp)) // Aplica el recorte redondeado
+                        .clip(RoundedCornerShape(16.dp))
                 )
             } else {
                 Box(
@@ -451,6 +459,7 @@ fun BussinesCard(
 
                     Text(
                         text = name.ifEmpty { "Nombre" },
+                        color = Color.Black,
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
@@ -459,6 +468,7 @@ fun BussinesCard(
                     if (showSurname) {
                         Text(
                             text = surname.ifEmpty { "Apellidos" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
@@ -468,6 +478,7 @@ fun BussinesCard(
                     if (showProfession) {
                         Text(
                             text = profession.ifEmpty { "Profesión" },
+                            color = Color.Black,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f),
@@ -501,7 +512,8 @@ fun BussinesCard(
                                 modifier = Modifier.size(24.dp)
                             )
                             Text(
-                                text = phone.ifEmpty { "Teléfono" }
+                                text = phone.ifEmpty { "Teléfono" },
+                                color = Color.Black,
                             )
                         }
                     }
@@ -519,7 +531,8 @@ fun BussinesCard(
                             modifier = Modifier.size(24.dp)
                         )
                         Text(
-                            text = email.ifEmpty { "Email" }
+                            text = email.ifEmpty { "Email" },
+                            color = Color.Black,
                         )
                     }
 
@@ -537,7 +550,8 @@ fun BussinesCard(
                                 modifier = Modifier.size(24.dp)
                             )
                             Text(
-                                text = web.ifEmpty { "Web" }
+                                text = web.ifEmpty { "Web" },
+                                color = Color.Black,
                             )
                         }
                     }
@@ -556,7 +570,8 @@ fun BussinesCard(
                                 modifier = Modifier.size(24.dp)
                             )
                             Text(
-                                text = if (github.isNotEmpty()) "github.com/$github" else "GitHub"
+                                text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                                color = Color.Black,
                             )
                         }
 
@@ -573,6 +588,7 @@ fun InputField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    maxLength: Int,
     errorMessage: String? = null,
     validate: (String) -> Boolean,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -586,12 +602,14 @@ fun InputField(
         TextField(
             value = tempValue,
             onValueChange = { input ->
-                tempValue = input
-                if (validate(input) || input.isEmpty()) {
-                    onValueChange(input)
-                    isError = false
-                } else {
-                    isError = true
+                if(input.length <= maxLength){
+                    tempValue = input
+                    if (validate(input) || input.isEmpty()) {
+                        onValueChange(input)
+                        isError = false
+                    } else {
+                        isError = true
+                    }
                 }
             },
             label = { Text(label) },
