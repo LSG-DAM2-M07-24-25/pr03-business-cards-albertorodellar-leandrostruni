@@ -1061,7 +1061,6 @@ que l’usuari les esculli amb algun dels components anteriors)
     -Imagenes predefinidas como opciones de fondo o de logo, puede estar en un Row o LazyRow con
      RadioButton o Icon para selecionar las imagenes.
 
-
 • Card (Per confeccionar la targeta a sota de les opcions anteriors)
     -Implemetar vista zoom?
 
