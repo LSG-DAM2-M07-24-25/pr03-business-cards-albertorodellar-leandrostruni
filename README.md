@@ -2,8 +2,9 @@
 
 # 💸💳 Bussiness Cards 💳💸
 
-¡Hola! 👋
-Enunciado de la práctica.
+¡Hola! 👋 <br>
+
+## Enunciado de la práctica.
 
 <p align="left">
  EXERCICIS ANDROID STUDIO II</br>
@@ -35,7 +36,7 @@ que l’usuari les esculli amb algun dels components anteriors)</br>
 
 </br>
 
-### **Descripción funcional de la App** 
+### 📝 **Descripción funcional de la App** 📝
 
 
 <p>
@@ -67,7 +68,7 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </p>
 </br>
 
-### **Capturas** 
+### 📸 **Capturas** 📸
 
 <div align="center">
   <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura_1" width="400"/>
