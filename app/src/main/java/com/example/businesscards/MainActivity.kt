@@ -27,10 +27,10 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -40,13 +40,15 @@ import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -58,6 +60,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
+import com.example.businesscards.ui.theme.LightBackgroundColor
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,6 +109,18 @@ fun BusinessCardsCreator(
     //Estado para el borde de la tarjeta
     var borderStroke by rememberSaveable { mutableStateOf<BorderStroke?>(null) }
 
+    //Lista para las imagenes de backgroud
+    val backgroundImages = listOf(
+        null to "Fondo predeterminado",
+        R.drawable.background_1 to "Opción 1",
+        R.drawable.background_2 to "Opción 2",
+        R.drawable.background_3 to "Opción 3"
+    )
+
+    //Estado para la imagen de fondo
+    var selectedBackgroundImage by rememberSaveable { mutableStateOf<Int?>(null) }
+
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -132,10 +147,13 @@ fun BusinessCardsCreator(
                 github = github,
                 showGitHub = showGitHub,
                 borderStroke = borderStroke ?: BorderStroke(0.dp, Color.Transparent),
+                backgroundImage = selectedBackgroundImage,
                 modifier = Modifier
                     .padding(16.dp)
                     .zIndex(1f)
+
             )
+
             Spacer(modifier = Modifier.height(6.dp))
 
             LazyColumn(
@@ -235,7 +253,7 @@ fun BusinessCardsCreator(
                         onValueChange = { web = it },
                         label = "Ingrese su Página Web: ",
                         errorMessage = "La dirección Web no tiene el formato válido",
-                        validate = { it.matches(Regex("^(https?://)?(www\\\\.)?[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
+                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -307,6 +325,17 @@ fun BusinessCardsCreator(
                     }
                     )
                 }
+
+                item {
+                    Text(
+                        text = "Seleccionar el fondo de la tarjeta"
+                    )
+                    DropDownMenuBackground(
+                        selectedImage = selectedBackgroundImage,
+                        onSelectedImage = { selectedBackgroundImage = it },
+                        backgroundImages = backgroundImages
+                    )
+                }
             }
         }
     }
@@ -330,25 +359,46 @@ fun BussinesCard(
     showGitHub: Boolean,
     imageLogo: Int,
     borderStroke: BorderStroke,
+    backgroundImage: Int?,
     modifier: Modifier = Modifier
 ) {
 
     Card(
         modifier = modifier
             .height(250.dp)
-            .fillMaxWidth()
-            .background(Color.Gray, shape = RoundedCornerShape(16.dp)),
+            .fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-        border = borderStroke
+        border = borderStroke,
+        shape = RoundedCornerShape(16.dp)
     )
     {
-        Box {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Fondo de imagen en el `Box` detrás del contenido
+            if (backgroundImage != null) {
+                Image(
+                    painter = painterResource(id = backgroundImage),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop, // Ajusta la imagen para cubrir toda el área
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(16.dp)) // Aplica el recorte redondeado
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.LightGray)
+                        .clip(RoundedCornerShape(16.dp))
+                )
+            }
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight()
 
             ) {
+                //Culumna seccion izquierda
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -395,6 +445,7 @@ fun BussinesCard(
                     }
                 }
 
+                //Columna seccion derecha
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -604,6 +655,52 @@ fun TriStateBorder(
     )
 }
 
+//Composable desl depleglabe para seleccionas imagen de fonde de la CardBussines
+@Composable
+fun DropDownMenuBackground(
+    selectedImage: Int?,
+    onSelectedImage: (Int?) -> Unit,
+    backgroundImages: List<Pair<Int?, String>>
+) {
+
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    val selectedImageDescription = remember(selectedImage) {
+        backgroundImages.firstOrNull { it.first == selectedImage }?.second
+            ?: "Selecciona una imagen de fondo"
+    }
+
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = selectedImageDescription,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.LightGray)
+                .padding(16.dp)
+                .clickable { expanded = !expanded }
+        )
+
+        //Desplegable
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false }
+        ) {
+            backgroundImages.forEach { (imageRes, description) ->
+                DropdownMenuItem(
+                    text = { Text(text = description) },
+                    onClick = {
+                        println(imageRes)
+                        onSelectedImage(imageRes)
+                        expanded = false
+                    })
+            }
+        }
+
+    }
+}
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
@@ -623,36 +720,48 @@ Cambiar web por Linkedin
 Creador de business cards
 Crea una app que permeti confeccionar business cards (targetes de visita).
 Aquesta app ha de disposar dels següents components dins d’una mateixa activitat:
+Implementado
 • Text (Per mostrar missatges a l’usuari)
    -Mostrar texto a usuario
 
+Implementado
 • TextField (Per tal de que l’usuari introdueixi les seves dades)
     -Ingresar datos del usuario.
 
+Implementado
 • CheckBox (Per sel·leccionar incloure o no alguna informació; per ex. cognoms,
 càrrec, etc.)
     -Implementar checkbox para mostrar o ocultar campos de la Card ()
 
+Implementado
 • Switch (Per escollir colors i aspectes gràfics de la targeta)
     -Probar tema claro y tema oscuro o cambiar entre dos temas predefinidos
 
+Implementado
 • TriState (Per escollir entre tres opcions que decidiu vosaltres)
     Probar cambiar marco de la Card, por ejemplo: sin borde, borde fino, borde grueso.
 
+
+Falta implementar
 • RadioButton (Per escollir aspectes gràfics de la targeta).
     -Radio Button para seleccionar tamaño fuente, tipo, color??
 
+Falta Implementar
 • Icon (Per a què l’usuari pugui afegir icones a la seva targeta: estrelles, casetes, etc.)
     -Permitir añadir iconos, usar LAzyRow?
 
+Implementado
 • Image (Per tal de que l’usuari pugui afegir una imatge de fons a la targeta. Podem
 tenir 4 imatges de fons predefinides que no interfereixin amb la lectura del contingut i
 que l’usuari les esculli amb algun dels components anteriors)
     -Imagenes predefinidas como opciones de fondo o de logo, puede estar en un Row o LazyRow con
      RadioButton o Icon para selecionar las imagenes.
 
+
 • Card (Per confeccionar la targeta a sota de les opcions anteriors)
     -Implemetar vista zoom?
+
+ Falta Implementar
 • Progress Indicator (per mostrar l’avenç en la creació de la targeta fins a acabar-la)
     -Implementar Progress Indicator en la parte superior de la BussinessCard.
  */
