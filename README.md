@@ -3,7 +3,7 @@
 # 💸💳 Bussiness Cards 💳💸
 
 ¡Hola! 👋
-Explicación práctica
+Enunciado de la práctica.
 
 <p align="left">
  EXERCICIS ANDROID STUDIO II</br>
@@ -67,9 +67,12 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </p>
 </br>
 
-### **Imágenes** 
+### **Capturas** 
 
-
+<div align="center">
+  <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura_1" width="400"/>
+  <img src="app/src/main/res/drawable/print_readme_2.jpg" alt="Captura_2" width="400"/>
+</div>
 
 
 ### 🛠️ Tecnologías y Herramientas 🛠️
@@ -87,20 +90,50 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </p>
 
 ***
+
+
 <table align="center">
   <tr>
-    <td align="center">
-      <a href="https://github.com/LeanEmanuel">
-        <img src= "https://github.com/LeanEmanuel/Images/blob/main/Leandro.png" alt="Mini Leandro" width="80">
-      </a>
+    <td>
+      <table align="center">
+        <tr>
+          <td align="center">
+            <a href="https://github.com/LeanEmanuel">
+              <img src="https://github.com/LeanEmanuel/Images/blob/main/Leandro.png" alt="Mini Leandro" width="80">
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://github.com/LeanEmanuel">
+              <img src="https://img.shields.io/badge/LeanEmanuel-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
+            </a>
+          </td>
+        </tr>
+      </table>
     </td>
-</tr>
-<tr>
-  <td>
-    <a href="https://github.com/LeanEmanuel">
-      <img src="https://img.shields.io/badge/LeanEmanuel-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
-    </a>
-  </td>
-</tr>
+    <td>
+      <table align="center">
+        <tr>
+          <td align="center">
+            <a href="https://github.com/AlbertoRodellar">
+              <img src="https://media.tenor.com/33I1sOQI3V4AAAAi/heimerdinger.gif" alt="Gif" width="80">
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://github.com/AlbertoRodellar">
+              <img src="https://img.shields.io/badge/AlbertoRodellar-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 </table>
+ 
+
+<!-- Logo GitHub -->
+
 </div>
