@@ -73,6 +73,11 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import kotlin.math.max
@@ -183,7 +188,7 @@ fun BusinessCardsCreator(
                     .zIndex(0f),
             ) {
 
-                item{
+                item {
                     Text(
                         text = "Cambiar icono de la tarjeta"
                     )
@@ -253,7 +258,7 @@ fun BusinessCardsCreator(
                         onValueChange = { phone = it },
                         label = "Ingrese su Teléfono: ",
                         maxLength = 20,
-                        errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
+                        errorMessage = "El teléfono tiene que empezar con el formato +34.",
                         validate = { it.matches(Regex("^\\+\\d{1,3} ?\\d{6,14}\$")) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
@@ -283,15 +288,15 @@ fun BusinessCardsCreator(
                 }
 
 
-                //TextField web
+                //TextField LinkdIn
                 item {
                     InputField(
                         value = web,
                         onValueChange = { web = it },
-                        label = "Ingrese su Página Web: ",
+                        label = "Usuario LinkedIn: ",
                         maxLength = 50,
-                        errorMessage = "La dirección Web no tiene el formato válido",
-                        validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n")) },
+                        errorMessage = "El nombre de usuario solo puede contener letras, números o guiones.",
+                        validate = { it.matches(Regex("^[a-zA-Z0-9-]{3,47}\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
                         keyboardActions = KeyboardActions(
                             onDone = { keyboardController?.hide() }
@@ -304,7 +309,7 @@ fun BusinessCardsCreator(
                     InputField(
                         value = github,
                         onValueChange = { github = it },
-                        label = "Ingrese su perfil de GitHub: ",
+                        label = "Usuario GitHub: ",
                         maxLength = 39,
                         errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
                         validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
@@ -444,7 +449,7 @@ fun BussinesCard(
                         .padding(16.dp)
                         .weight(1f)
                     //.padding(end = 8.dp)
-                    ,horizontalAlignment = Alignment.CenterHorizontally
+                    , horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
                     Icon(
@@ -550,7 +555,7 @@ fun BussinesCard(
                                 modifier = Modifier.size(24.dp)
                             )
                             Text(
-                                text = web.ifEmpty { "Web" },
+                                text = web.ifEmpty { "LinkedIn" },
                                 color = Color.Black,
                             )
                         }
@@ -570,11 +575,10 @@ fun BussinesCard(
                                 modifier = Modifier.size(24.dp)
                             )
                             Text(
-                                text = if (github.isNotEmpty()) "github.com/$github" else "GitHub",
+                                text = github.ifEmpty { "GitHub" },
                                 color = Color.Black,
                             )
                         }
-
                     }
                 }
             }
@@ -599,7 +603,7 @@ fun InputField(
 
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        TextField(
+        OutlinedTextField(
             value = tempValue,
             onValueChange = { input ->
                 if (input.length <= maxLength) {
@@ -613,10 +617,20 @@ fun InputField(
                 }
             },
             label = { Text(label) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
+                .padding(top = 8.dp),
             isError = isError,
+            singleLine = true,
             keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions
+            keyboardActions = keyboardActions,
+            shape = RoundedCornerShape(12.dp),
+            colors = TextFieldDefaults.colors(
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                cursorColor = if (isError) Color.Red else MaterialTheme.colorScheme.primary,
+                errorCursorColor = Color.Red,
+                errorIndicatorColor = Color.Red
+            ),
 
         )
         if (isError && errorMessage != null) {
@@ -677,7 +691,7 @@ fun CheckBoxOption(
                 checked = showWeb,
                 onCheckedChange = onShowWebChange
             )
-            Text(text = "Mostrar Web")
+            Text(text = "Mostrar LinkedIn")
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(
@@ -779,10 +793,6 @@ fun RadioButtonRow(onOptionSelected: (Painter) -> Unit) {
         }
     }
 }
-
-
-
-
 
 
 //Composable del deplegable para seleccionar imagen de fondo de la BusinessCard
