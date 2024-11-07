@@ -85,7 +85,6 @@ import androidx.compose.animation.core.tween
  * el tema oscuro (`isDarkTheme`) y define `BusinessCardsTheme` como el tema principal de la aplicación.
  * Permite alternar entre el tema claro y oscuro.
  *
- * @param savedInstanceState Estado previamente guardado, si existe, para restaurar la actividad.
  */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
