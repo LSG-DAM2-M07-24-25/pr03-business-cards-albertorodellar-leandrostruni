@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.businesscards.ui.theme.BusinessCardsTheme
 import com.example.businesscards.ui.theme.LightBackgroundColor
+import kotlin.math.max
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,6 +171,7 @@ fun BusinessCardsCreator(
                         value = name,
                         onValueChange = { name = it },
                         label = "Ingrese su Nombre: ",
+                        maxLength = 25,
                         errorMessage = "El nombre solo debe contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -185,6 +187,7 @@ fun BusinessCardsCreator(
                         value = surname,
                         onValueChange = { surname = it },
                         label = "Ingrese su Apellido: ",
+                        maxLength = 25,
                         errorMessage = "El Apellido solo puede contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -201,6 +204,7 @@ fun BusinessCardsCreator(
                         value = profession,
                         onValueChange = { profession = it },
                         label = "Ingrese su Profesión: ",
+                        maxLength = 22,
                         errorMessage = "La profesión solo puede contener letras.",
                         validate = { it.matches(Regex("^[a-zA-Z\\s]+$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -217,8 +221,9 @@ fun BusinessCardsCreator(
                         value = phone,
                         onValueChange = { phone = it },
                         label = "Ingrese su Teléfono: ",
+                        maxLength = 20,
                         errorMessage = "El teléfono/móvil tiene que tener el formato +XX seguido de 9 dígitos.",
-                        validate = { it.matches(Regex("^\\+\\d{1,3}\\d{9}\$")) },
+                        validate = { it.matches(Regex("^\\+\\d{1,3} ?\\d{6,14}\$")) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Phone,
                             imeAction = ImeAction.Done
@@ -236,6 +241,7 @@ fun BusinessCardsCreator(
                         value = email,
                         onValueChange = { email = it },
                         label = "Ingrese su Email: ",
+                        maxLength = 50,
                         errorMessage = "El Email no tiene el fórmato válido.",
                         validate = { Patterns.EMAIL_ADDRESS.matcher(it).matches() },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -252,6 +258,7 @@ fun BusinessCardsCreator(
                         value = web,
                         onValueChange = { web = it },
                         label = "Ingrese su Página Web: ",
+                        maxLength = 50,
                         errorMessage = "La dirección Web no tiene el formato válido",
                         validate = { it.matches(Regex("^(https?://)?(www\\.)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(/.*)?\$\n"))},
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -267,6 +274,7 @@ fun BusinessCardsCreator(
                         value = github,
                         onValueChange = { github = it },
                         label = "Ingrese su perfil de GitHub: ",
+                        maxLength = 39,
                         errorMessage = "Ingrese un perfil de usuario de GitHub válido.",
                         validate = { it.matches(Regex("^[a-zA-Z0-9_-]{1,39}\$")) },
                         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -512,6 +520,7 @@ fun InputField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
+    maxLength: Int,
     errorMessage: String? = null,
     validate: (String) -> Boolean,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -525,12 +534,14 @@ fun InputField(
         TextField(
             value = tempValue,
             onValueChange = { input ->
-                tempValue = input
-                if (validate(input) || input.isEmpty()) {
-                    onValueChange(input)
-                    isError = false
-                } else {
-                    isError = true
+                if(input.length <= maxLength){
+                    tempValue = input
+                    if (validate(input) || input.isEmpty()) {
+                        onValueChange(input)
+                        isError = false
+                    } else {
+                        isError = true
+                    }
                 }
             },
             label = { Text(label) },
