@@ -97,12 +97,12 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 <table align="center">
   <tr>
     <td align="center">
-      <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura 1" width="200"/>
+      <img src="app/src/main/res/drawable/print_readme_1.webp" alt="Captura 1" width="200"/>
       <p>Captura 1</p>
     </td>
     <td width="100"></td> <!-- Celda vacía para espacio -->
     <td align="center">
-      <img src="app/src/main/res/drawable/print_readme_2.jpg" alt="Captura 2" width="200"/>
+      <img src="app/src/main/res/drawable/print_readme_2.webp" alt="Captura 2" width="200"/>
       <p>Captura 2</p>
     </td>
   </tr>
