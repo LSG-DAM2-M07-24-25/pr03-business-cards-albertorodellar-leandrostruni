@@ -2,8 +2,9 @@
 
 # 💸💳 Bussiness Cards 💳💸
 
-¡Hola! 👋
-Explicación práctica
+¡Hola! 👋 <br>
+
+## Enunciado de la práctica.
 
 <p align="left">
  EXERCICIS ANDROID STUDIO II</br>
@@ -35,48 +36,45 @@ que l’usuari les esculli amb algun dels components anteriors)</br>
 
 </br>
 
-### **Descripción funcional de la App** 
+### 📝 **Descripción funcional de la App** 📝
 
-</br>
 
-### **🚀 Instrucciones Básicas:**
-
-<p align="center">
-    
+<p>
+Esta aplicación es un creador de tarjetas de visita completamente personalizable,. Diseñada con una interfaz intuitiva, permite a los usuarios introducir, organizar y estilizar la información que desean mostrar en sus tarjetas de presentación.</br>
 </p>
-  
-### **✨ Características Principales:**<br>
+<p>
+ La app cumple con los siguientes requisitos:</br>
 
-<p align="center">
-
+• Texto: Para mostrar mensajes y etiquetas que guían al usuario.</br>
+</br>
+• TextField: Campos donde el usuario puede introducir su información personal, como nombre, apellidos, cargo y detalles de contacto.</br>
+</br>
+• CheckBox: Permite seleccionar qué información incluir, como apellidos, cargo o redes sociales.</br>
+</br>
+• Switch: Alterna entre los temas de la tarjeta, por ejemplo, modo claro y oscuro.</br>
+</br>
+• TriState: Opción de selección múltiple para modificar aspectos del borde de la tarjeta.</br>
+</br>
+• RadioButton: Selección de iconos que representan el perfil, como iconos prediseñados para diferentes profesiones.</br>
+</br>
+• Icono: Permite agregar un icono de perfil en la tarjeta.</br>
+</br>
+• Imagen: Selección de imagen de fondo de entre opciones predefinidas, sin interferir en la legibilidad.</br>
+</br>
+• Card: Estructura visual de la tarjeta, que se genera en tiempo real en la interfaz.</br>
+</br>
+• Progress Indicator: Indicador de progreso que muestra el avance en la personalización de la tarjeta.</br>
+</br>
 </p>
-<br>
-
----
-
 </br>
 
+### 📸 **Capturas** 📸
 
----
+<div align="center">
+  <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura_1" width="400"/>
+  <img src="app/src/main/res/drawable/print_readme_2.jpg" alt="Captura_2" width="400"/>
+</div>
 
-</br>
-
-### **⚙️ Descripción Técnica:**
-
-
-### 📁 Estructura de Directorios 📁
-
-<table align="center" border="6px">
-  <tr>
-    <td>
-      <pre>
-📦 Práctica BussinessCard
-      </pre>
-    </td>
-  </tr>
-</table>
-
-</br>
 
 ### 🛠️ Tecnologías y Herramientas 🛠️
 
@@ -93,20 +91,50 @@ que l’usuari les esculli amb algun dels components anteriors)</br>
 </p>
 
 ***
+
+
 <table align="center">
   <tr>
-    <td align="center">
-      <a href="https://github.com/LeanEmanuel">
-        <img src= "https://github.com/LeanEmanuel/Images/blob/main/Leandro.png" alt="Mini Leandro" width="80">
-      </a>
+    <td>
+      <table align="center">
+        <tr>
+          <td align="center">
+            <a href="https://github.com/LeanEmanuel">
+              <img src="https://github.com/LeanEmanuel/Images/blob/main/Leandro.png" alt="Mini Leandro" width="80">
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://github.com/LeanEmanuel">
+              <img src="https://img.shields.io/badge/LeanEmanuel-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
+            </a>
+          </td>
+        </tr>
+      </table>
     </td>
-</tr>
-<tr>
-  <td>
-    <a href="https://github.com/LeanEmanuel">
-      <img src="https://img.shields.io/badge/LeanEmanuel-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
-    </a>
-  </td>
-</tr>
+    <td>
+      <table align="center">
+        <tr>
+          <td align="center">
+            <a href="https://github.com/AlbertoRodellar">
+              <img src="https://media.tenor.com/33I1sOQI3V4AAAAi/heimerdinger.gif" alt="Gif" width="80">
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <a href="https://github.com/AlbertoRodellar">
+              <img src="https://img.shields.io/badge/AlbertoRodellar-Git?style=flat&logo=github&logoColor=white&labelColor=black&color=50e520&label=GitHub" alt="Badge">
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
 </table>
+ 
+
+<!-- Logo GitHub -->
+
 </div>
