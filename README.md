@@ -44,10 +44,10 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </p>
 </br>
 
-
+ ### ✔️ **La App cumple con los siguientes requisitos** ✔️
+ 
 <p>
- La app cumple con los siguientes requisitos:</br>
-
+ 
 • ***[Texto]*** Para mostrar mensajes y etiquetas que guían al usuario.</br>
 </br>
 • ***[TextField]*** Campos donde el usuario puede introducir su información personal, como nombre, apellidos, cargo y detalles de contacto.</br>
@@ -67,16 +67,22 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 • ***[Card]*** Estructura visual de la tarjeta, que se genera en tiempo real en la interfaz.</br>
 </br>
 • ***[Progress Indicator]*** Indicador de progreso que muestra el avance en la personalización de la tarjeta.</br>
+
 </br>
 </p>
 </br>
 
+---
+</br>
+
 ### 📸 **Capturas** 📸
 
+</br>
 <div align="center">
-  <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura_1" width="400"/>
-  <img src="app/src/main/res/drawable/print_readme_2.jpg" alt="Captura_2" width="400"/>
+  <img src="app/src/main/res/drawable/print_readme_1.jpg" alt="Captura_1" width="200"/>
+  <img src="app/src/main/res/drawable/print_readme_2.jpg" alt="Captura_2" width="200"/>
 </div>
+</br>
 
 
 ### 🛠️ Tecnologías y Herramientas 🛠️
