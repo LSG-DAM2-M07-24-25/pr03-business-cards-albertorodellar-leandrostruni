@@ -73,6 +73,7 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </br>
 
 ---
+
 </br>
 
 ### 📸 **Capturas** 📸
@@ -93,22 +94,24 @@ Esta aplicación es un creador de tarjetas de visita completamente personalizabl
 </table>
 </br>
 
+---
 
 ### 🛠️ Tecnologías y Herramientas 🛠️
 
 </br>
-
+<img alt="android" src="https://user-images.githubusercontent.com/25181517/117269608-b7dcfb80-ae58-11eb-8e66-6cc8753553f0.png" width="80"/>
+<img alt="github" src="https://user-images.githubusercontent.com/25181517/192108374-8da61ba1-99ec-41d7-80b8-fb2f7c0a4948.png" width="80"/> 
 <img alt="kotlin" src="https://user-images.githubusercontent.com/25181517/185062810-7ee0c3d2-17f2-4a98-9d8a-a9576947692b.png" width="80"/>  
 <img alt="android studio" src="https://user-images.githubusercontent.com/25181517/192108895-20dc3343-43e3-4a54-a90e-13a4abbc57b9.png" width="80"/><br><br><br>
 
+
+***
 
 <p>
   Integrantes:
   Alberto Rodellar,
   Leandro Struni</br>
 </p>
-
-***
 
 
 <table align="center">
